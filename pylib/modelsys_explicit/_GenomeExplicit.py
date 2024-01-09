@@ -4,6 +4,10 @@ import numpy as np
 
 
 class GenomeExplicit:
+    """A genome with explicitly-specified knockout fitness effects and
+    configurable fitness assay limitations on or distortions of detectability.
+    """
+
     _assay_artifact_functors: typing.List[typing.Callable]
     _knockout_effect_functors: typing.List[typing.Callable]
 
@@ -43,6 +47,27 @@ class GenomeExplicit:
         self._assay_artifact_functors = [*assay_artifacts]
 
     def test_knockout(self: "GenomeExplicit", knockout: np.array) -> int:
+        """Test sign of knockout fitness effect, if observable.
+
+        Calculates knockout effect as sum of effects from knockout effect
+        functors after sequenced through assay artifact functors.
+
+        Parameters
+        ----------
+        knockout : np.array
+            A binary array representing knockout sites, where 1 indicates site
+            knockout.
+
+            Length of array corresponds to genome size, i.e., one entry per
+            genome site.
+
+        Returns
+        -------
+        int
+            1 if the cumulative effect of the knockouts is detectably
+            deleterious, -1 if cumulative effects of knockouts is detectably
+            adaptive, 0 otherwise.
+        """
         result = sum(
             effect(knockout) for effect in self._knockout_effect_functors
         )
