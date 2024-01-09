@@ -39,7 +39,7 @@ def pick_doses_extrema(
             test_knockout(sample_knockout(dose, num_sites))
             for dose in smear_doses
         ],
-    )
+    ).astype(bool)
     if np.all(smear_results) or not np.any(smear_results):
         return np.unique(np.linspace(1, num_sites, max_doses, dtype=int))
 

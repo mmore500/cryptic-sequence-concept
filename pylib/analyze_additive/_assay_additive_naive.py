@@ -1,3 +1,4 @@
+from numbers import Number
 import typing
 
 import numpy as np
@@ -60,10 +61,26 @@ def assay_additive_naive(
       in the genome (i.e., `num_sites`) and
     - the effect size is estimated as the inverse of success count n.
     """
+
+    def check_effect(effect: Number) -> Number:
+        if effect < 0:
+            raise NotImplementedError(
+                f"Adaptive knockout effect {effect} ocurred; "
+                "naive additive assay only accounts for "
+                "neutral or deleterious knockout effects",
+            )
+        if effect not in (-1, 0, 1):
+            raise NotImplementedError(
+                "Additive knockout only suports binary fitness effects; "
+                f"knockout effect {effect} was detected.",
+            )
+
+        return effect
+
     sensitivities = [
         np.mean(
             [
-                test_knockout(sample_knockout(dose, num_sites))
+                check_effect(test_knockout(sample_knockout(dose, num_sites)))
                 for __ in range(num_replications)
             ],
         )
