@@ -194,6 +194,7 @@ numpy==1.23.5
     #   scipy
     #   seaborn
     #   teeplot
+    #   uniformsumdistribution
 opytional==0.1.0
     # via
     #   -r requirements.in
@@ -289,7 +290,9 @@ ruff==0.0.260
 safe-assert==0.4.0
     # via hstrat
 scipy==1.10.1
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   uniformsumdistribution
 seaborn==0.12.1
     # via
     #   -r requirements.in
@@ -345,6 +348,8 @@ typing-extensions==4.6.3
     #   typing-inspect
 typing-inspect==0.9.0
     # via pandera
+uniformsumdistribution==1.0.3
+    # via -r requirements.in
 wcwidth==0.2.6
     # via
     #   prettytable

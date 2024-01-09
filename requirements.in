@@ -18,6 +18,7 @@ scipy==1.10.1
 seaborn==0.12.1
 teeplot==0.5.0
 tqdm==4.64.1
+UniformSumDistribution==1.0.3
 
 # https://github.com/sphinx-doc/sphinx/issues/10291
 Jinja2<3.1
