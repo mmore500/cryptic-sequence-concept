@@ -21,8 +21,7 @@ class IrwinHallDistribution:
         a: float,
         b: float,
     ) -> None:
-        """
-        Initialize.
+        """Initialize.
 
         Parameters
         ----------

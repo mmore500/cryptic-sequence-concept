@@ -17,5 +17,7 @@ def test_sample_knockout(num_sites: int, num_knockouts: int):
     assert result.shape == (num_sites,)
     assert result.sum() == num_knockouts
     if num_knockouts:
-        while np.array_equal(sample_knockout(num_knockouts, num_sites), result):
+        while np.array_equal(
+            sample_knockout(num_knockouts, num_sites), result
+        ):
             pass
