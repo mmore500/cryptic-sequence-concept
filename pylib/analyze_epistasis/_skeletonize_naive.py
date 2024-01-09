@@ -64,7 +64,7 @@ def _try_extend_knockout(
         knockout_result = test_knockout(knockout)
         if knockout_result < 0:
             raise NotImplementedError(
-                "Adaptive knockout result {knockout_result} ocurred for "
+                f"Adaptive knockout result {knockout_result} ocurred for "
                 f"site {site} with knockout {knockout}; naive skeletonization "
                 "only accounts for deleterious or neutral knockout outcomes.",
             )
