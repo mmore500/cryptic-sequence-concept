@@ -1,5 +1,6 @@
-from numbers import Number
+from numbers import Integral, Number
 import typing
+import warnings
 
 import numpy as np
 
@@ -66,10 +67,17 @@ def _add_additive_effects(
         Array with knockout effects per genome site, with positive values
         deleterious, negative values advantageous, and zero values neutral.
     """
+    if effect_prevalence == 1:
+        warnings.warn(
+            "Effect prevalence interpretation is ambiguous for value one, "
+            "treating as count if integral else rate.",
+        )
     num_sites = array.size
     num_effects = (
         int(num_sites * effect_prevalence)
-        if effect_prevalence < 1
+        if effect_prevalence < 1.0
+        or effect_prevalence == 1.0
+        and not isinstance(effect_prevalence, Integral)
         else int(effect_prevalence)
     )
 
