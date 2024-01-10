@@ -1,5 +1,5 @@
-import pytest
 import numpy as np
+
 from pylib.analyze_additive import pick_doses_extrema
 
 
@@ -23,9 +23,9 @@ def test_knockout_all_ineffective():
     )
 
 
-def test_knockout_effective_range():
+def test_knockout_effective_range1():
     def mock_test_knockout(sample):
-        return 4 <= sample.sum() <= 12
+        return sample.sum() == 4 or sample.sum() >= 12
 
     num_sites = 22
     max_doses = 5
@@ -34,9 +34,9 @@ def test_knockout_effective_range():
     assert min(result) >= 4 and max(result) <= 12
 
 
-def test_knockout_effective_range():
+def test_knockout_effective_range2():
     def mock_test_knockout(sample):
-        return 4 <= sample.sum() <= 4
+        return sample.sum() == 4
 
     num_sites = 22
     max_doses = 5
