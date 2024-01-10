@@ -3,6 +3,19 @@ import typing
 import numpy as np
 
 
+# extension ideas
+# ---------------
+# - make use of decoarsening knockouts (i.e., more at once)
+# - make use of parallel testing
+#  * decoarsen only when no effect is detected in any parallel test
+#  * can parallel knockouts be combined?
+# - how to handle unreliable fitness tests (false negatives)?
+#   * backtracking?
+#   * also, how to handle intermittent fitness effects?
+# - can sites be sorted based on associations with fitness
+#   effects? or permanently excluded once a fitness effect
+#   is detected?
+# - do any of these extensions bias the sampled skeletons?
 def skeletonize_naive(
     num_sites: int,
     test_knockout: typing.Callable,
