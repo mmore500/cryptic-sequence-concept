@@ -52,7 +52,7 @@ def jackknife_skeleton(
         knockout_result = test_knockout(knockout.astype(bool))
         records.append(
             {
-                "dose": knockout.astype(bool).sum(),
+                "jackknife dose": knockout.astype(bool).sum(),
                 # if knockout is not sensitive,
                 # then assume on threshold of sensitivity
                 "raw jackknife result": knockout_result,
