@@ -52,7 +52,9 @@ def create_epistasis_matrix_overlapping(
         )  # replace=False: no vals from same set at same site
 
     # how many rows are necessary for the site with most epistatic values?
-    nrows = scipy_stats.mode(site_indices, axis=None).count or 1  # empty case
+    nrows = (
+        scipy_stats.mode(site_indices, axis=None, keepdims=False).count or 1
+    )  # empty case
     assert not np.isnan(nrows)
 
     # corresponding to that set's identity

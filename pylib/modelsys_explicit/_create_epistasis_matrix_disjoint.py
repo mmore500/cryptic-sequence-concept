@@ -47,7 +47,7 @@ def create_epistasis_matrix_disjoint(
 
     # no site should have more than one epistasis set member
     # <= 1 handles empty case
-    assert scipy_stats.mode(site_indices, axis=None).count <= 1
+    assert scipy_stats.mode(site_indices, axis=None, keepdims=False).count <= 1
 
     # each epistasis set gets its own column, with identical value
     # corresponding to that set's identity (1-indexed)

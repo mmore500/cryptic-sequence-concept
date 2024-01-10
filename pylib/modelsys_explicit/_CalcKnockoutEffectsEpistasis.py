@@ -43,7 +43,9 @@ class CalcKnockoutEffectsEpistasis:
         """
         self._effect_thresh = opyt.or_value(
             effect_thresh,
-            scipy_stats.mode(nonzero(epistasis_matrix), axis=None).count,
+            scipy_stats.mode(
+                nonzero(epistasis_matrix), axis=None, keepdims=False
+            ).count,
         )
         self._effect_size = effect_size
         self._epistasis_matrix = epistasis_matrix
@@ -71,7 +73,7 @@ class CalcKnockoutEffectsEpistasis:
         """
         active_sites = self._epistasis_matrix * knockout
         max_set_activations = scipy_stats.mode(
-            nonzero(active_sites), axis=None
+            nonzero(active_sites), axis=None, keepdims=False
         ).count
 
         return (max_set_activations >= self._effect_thresh) * self._effect_size
