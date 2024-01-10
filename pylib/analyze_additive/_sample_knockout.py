@@ -13,6 +13,6 @@ def sample_knockout(dose: int, num_sites: int) -> np.array:
 
         The length of the array is equal to `num_sites`.
     """
-    res = np.zeros(num_sites)
+    res = np.zeros(num_sites, dtype=bool)
     res[np.random.choice(num_sites, dose, replace=False)] = 1
     return res

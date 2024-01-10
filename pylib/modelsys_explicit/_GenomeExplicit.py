@@ -68,6 +68,10 @@ class GenomeExplicit:
             deleterious, -1 if cumulative effects of knockouts is detectably
             adaptive, 0 otherwise.
         """
+        if knockout.size and knockout.dtype != bool:
+            raise ValueError(
+                f"Knockout array should be boolean, but was {knockout.dtype}.",
+            )
         result = sum(
             effect(knockout) for effect in self._knockout_effect_functors
         )

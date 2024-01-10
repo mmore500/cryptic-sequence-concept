@@ -25,7 +25,7 @@ def test_GenomeExplicit_test_knockout_detectably_deleterious(
 
     genome = GenomeExplicit([effect_functor])
 
-    knockout_array = np.array([1, 1, 0, 0])
+    knockout_array = np.array([1, 1, 0, 0], dtype=bool)
     result = genome.test_knockout(knockout_array)
     assert result == 1
 
@@ -37,7 +37,7 @@ def test_GenomeExplicit_test_knockout_detectably_adaptive(effect_size: float):
 
     genome = GenomeExplicit([effect_functor])
 
-    knockout_array = np.array([1, 1, 0, 0])
+    knockout_array = np.array([1, 1, 0, 0], dtype=bool)
     result = genome.test_knockout(knockout_array)
     assert result == -1
 
@@ -48,7 +48,7 @@ def test_GenomeExplicit_test_knockout_undetectably_deleterious():
 
     genome = GenomeExplicit([effect_functor])
 
-    knockout_array = np.array([1, 1, 0, 0])
+    knockout_array = np.array([1, 1, 0, 0], dtype=bool)
     result = genome.test_knockout(knockout_array)
     assert result == 0
 
@@ -59,7 +59,7 @@ def test_GenomeExplicit_test_knockout_neutral():
 
     genome = GenomeExplicit([effect_functor])
 
-    knockout_array = np.array([1, 1, 0, 0])
+    knockout_array = np.array([1, 1, 0, 0], dtype=bool)
     result = genome.test_knockout(knockout_array)
     assert result == 0
 
@@ -73,6 +73,6 @@ def test_GenomeExplicit_test_artifact():
 
     genome = GenomeExplicit([effect_functor], [artifact_functor])
 
-    knockout_array = np.array([1, 1, 0, 0])
+    knockout_array = np.array([1, 1, 0, 0], dtype=bool)
     result = genome.test_knockout(knockout_array)
     assert result == 0
