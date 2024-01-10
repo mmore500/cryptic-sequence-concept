@@ -69,18 +69,17 @@ def assay_additive_naive(
                 "naive additive assay only accounts for "
                 "neutral or deleterious knockout effects",
             )
-        if effect not in (-1, 0, 1):
-            raise NotImplementedError(
-                "Additive knockout only suports binary fitness effects; "
-                f"knockout effect {effect} was detected.",
-            )
 
         return effect
 
     sensitivities = [
         np.mean(
             [
-                check_effect(test_knockout(sample_knockout(dose, num_sites)))
+                np.sign(
+                    check_effect(
+                        test_knockout(sample_knockout(dose, num_sites))
+                    ),
+                )
                 for __ in range(num_replications)
             ],
         )

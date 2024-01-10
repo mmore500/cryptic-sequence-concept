@@ -27,7 +27,7 @@ def test_GenomeExplicit_test_knockout_detectably_deleterious(
 
     knockout_array = np.array([1, 1, 0, 0], dtype=bool)
     result = genome.test_knockout(knockout_array)
-    assert result == 1
+    assert result >= 1
 
 
 @pytest.mark.parametrize("effect_size", [-1.0, -1.1, -100.1])
@@ -39,7 +39,7 @@ def test_GenomeExplicit_test_knockout_detectably_adaptive(effect_size: float):
 
     knockout_array = np.array([1, 1, 0, 0], dtype=bool)
     result = genome.test_knockout(knockout_array)
-    assert result == -1
+    assert result <= -1
 
 
 def test_GenomeExplicit_test_knockout_undetectably_deleterious():

@@ -46,7 +46,7 @@ class GenomeExplicit:
         self._knockout_effect_functors = [*knockout_effects]
         self._assay_artifact_functors = [*assay_artifacts]
 
-    def test_knockout(self: "GenomeExplicit", knockout: np.array) -> int:
+    def test_knockout(self: "GenomeExplicit", knockout: np.array) -> float:
         """Test sign of knockout fitness effect, if observable.
 
         Calculates knockout effect as sum of effects from knockout effect
@@ -63,9 +63,9 @@ class GenomeExplicit:
 
         Returns
         -------
-        int
-            1 if the cumulative effect of the knockouts is detectably
-            deleterious, -1 if cumulative effects of knockouts is detectably
+        float
+            Value >=1.0 if the cumulative effect of the knockouts is detectably
+            deleterious, =<-1.0 if cumulative effects of knockouts is detectably
             adaptive, 0 otherwise.
         """
         if knockout.size and knockout.dtype != bool:
@@ -78,4 +78,4 @@ class GenomeExplicit:
         for artifact in self._assay_artifact_functors:
             result = artifact(result)
         # TODO refactor: make thresholding an assay artifact instead of hardcode
-        return np.sign(result) * (np.abs(result) >= 1.0)
+        return result * (np.abs(result) >= 1.0)
