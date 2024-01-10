@@ -18,7 +18,7 @@ class CalcKnockoutEffectsEpistasis:
     def __init__(
         self: "CalcKnockoutEffectsEpistasis",
         epistasis_matrix: np.array,
-        effect_thresh: typing.Optional[int],
+        effect_thresh: typing.Optional[int] = None,
         effect_size: float = 1.0,
     ) -> None:
         """Initialize functor with epistatic interaction information.
