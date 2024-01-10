@@ -1,3 +1,4 @@
+import itertools as it
 import typing
 
 import numpy as np
@@ -36,23 +37,29 @@ def skeletonize_naive(
     Returns
     -------
     np.array
-        A binary mask where 1 represents a knockout at a site and 0 represents
-        no knockout.
+        A mask where 0 represents no knockout and positive integer values
+        corresponding to knockout order indicate a knockout.
 
         The length of the array is equal to `num_sites`.
     """
-    knocked_out = np.zeros(num_sites, dtype=bool)
+    knocked_order = np.zeros(num_sites, dtype=int)
 
-    while True:
-        extended_knockout = _try_extend_knockout(test_knockout, knocked_out)
-        assert extended_knockout.sum() >= knocked_out.sum()
-        if np.array_equal(extended_knockout, knocked_out):
+    for order in it.count():
+        extended_knockout = _try_extend_knockout(
+            test_knockout, knocked_order.astype(bool)
+        )
+        assert extended_knockout.sum() >= knocked_order.astype(bool).sum()
+        if np.array_equal(extended_knockout, knocked_order.astype(bool)):
             break
-        assert extended_knockout.sum() > knocked_out.sum() >= 0
-        knocked_out = extended_knockout
-        assert knocked_out.sum() > 0
 
-    return knocked_out
+        assert extended_knockout.sum() > knocked_order.astype(bool).sum() >= 0
+        diff = extended_knockout ^ knocked_order.astype(bool)
+        assert diff.sum() == 1
+        knocked_order[diff] = order + 1  # 0 is reserved for no knockout
+
+        assert knocked_order.astype(bool).sum() > 0
+
+    return knocked_order
 
 
 def _try_extend_knockout(
