@@ -1,3 +1,5 @@
+from numbers import Integral
+
 import numpy as np
 from scipy import stats as scipy_stats
 
@@ -53,9 +55,11 @@ def create_epistasis_matrix_overlapping(
 
     # how many rows are necessary for the site with most epistatic values?
     nrows = (
-        scipy_stats.mode(site_indices, axis=None, keepdims=False).count or 1
-    )  # empty case
-    assert not np.isnan(nrows)
+        scipy_stats.mode(site_indices, axis=None, keepdims=False).count
+        if num_epistatic_sets * epistatic_set_size  # empty case
+        else 1
+    )
+    assert isinstance(nrows, Integral)
 
     # corresponding to that set's identity
     epistasis_values = (
