@@ -1,10 +1,13 @@
+import numpy as np
 import pytest
 
 from pylib.auxlib._jackknife_mark_recapture_estimate import (
     jackknife_mark_recapture_estimate,
+    _95CIk,
     _Tk,
     _NJk,
     _NJk_v2,
+    _seNjk,
 )
 
 
@@ -53,8 +56,39 @@ def test_Tk():
     assert abs(_Tk(4)(f) - 0.417) < 0.1
 
 
+def test_seNjk():
+    f = [43, 16, 8, 6, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    assert len(f) == 18
+
+    assert abs(_seNjk(1)(f) - 8.9) < 0.1
+    assert abs(_seNjk(2)(f) - 14.9) < 0.1
+    assert abs(_seNjk(3)(f) - 21.9) < 1.0
+    assert abs(_seNjk(4)(f) - 31.1) < 1.0
+    assert abs(_seNjk(5)(f) - 43.5) < 1.0
+
+
+def test_95CIk():
+    f = [43, 16, 8, 6, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    assert len(f) == 18
+
+    assert np.array_equal(_95CIk(0)(f), (np.nan, np.nan), equal_nan=True)
+    assert abs(_95CIk(1)(f)[0] - (116.6 - 8.9 * 1.96)) < 1.0
+    assert abs(_95CIk(2)(f)[0] - (141.5 - 14.9 * 1.96)) < 1.0
+    assert abs(_95CIk(3)(f)[0] - (158.6 - 21.9 * 1.96)) < 1.0
+    assert abs(_95CIk(4)(f)[0] - (170.3 - 31.1 * 1.96)) < 1.0
+    assert abs(_95CIk(5)(f)[0] - (176.5 - 43.5 * 1.96)) < 1.0
+    assert abs(_95CIk(1)(f)[1] - (116.6 + 8.9 * 1.96)) < 1.0
+    assert abs(_95CIk(2)(f)[1] - (141.5 + 14.9 * 1.96)) < 1.0
+    assert abs(_95CIk(3)(f)[1] - (158.6 + 21.9 * 1.96)) < 1.0
+    assert abs(_95CIk(4)(f)[1] - (170.3 + 31.1 * 1.96)) < 1.0
+    assert abs(_95CIk(5)(f)[1] - (176.5 + 43.5 * 1.96)) < 1.0
+
+
 def test_jackknife_mark_recapture_estimate():
     f = [43, 16, 8, 6, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     assert len(f) == 18
 
-    assert abs(jackknife_mark_recapture_estimate(f) - 158.6) < 1
+    est, ci = jackknife_mark_recapture_estimate(f)
+    assert abs(est - 158.6) < 1
+    assert abs(ci[0] - (158.6 - 21.9 * 1.96)) < 1
+    assert abs(ci[1] - (158.6 + 21.9 * 1.96)) < 1

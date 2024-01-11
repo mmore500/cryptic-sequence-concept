@@ -130,7 +130,7 @@ def _bi(i: int, k: int) -> typing.Callable:
     return lambda t: _aik(i, k + 1)(t) - _aik(i, k)(t)
 
 
-def _varJk(k: int) -> typing.Callable:
+def _varNJk_diff(k: int) -> typing.Callable:
 
     def _var(f: typing.Sequence[int]) -> int:
         S = sum(f)
@@ -149,10 +149,42 @@ def _Tk(k: int) -> typing.Callable:
     def _T(f: typing.Sequence[int]) -> int:
         return (
             (_NJk(k + 1)(f) - _NJk(k)(f))
-            / _varJk(k)(f) ** (1 / 2)
+            / _varNJk_diff(k)(f) ** (1 / 2)
         )
 
     return _T
+
+def _varNjk(k: int) -> typing.Callable:
+
+    def varNj(f: typing.Sequence[int]) -> float:
+        t = len(f)
+        return sum(
+            _aik(i, k)(t) ** 2 * f_
+            for i, f_ in enumerate(f)
+        ) - _NJk(k)(f)
+
+    return varNj
+
+
+def _seNjk(k: int) -> typing.Callable:
+
+    def seNj(f: typing.Sequence[int]) -> float:
+        return _varNjk(k)(f) ** (1 / 2)
+
+    return seNj
+
+
+def _95CIk(k: int) -> typing.Callable:
+
+    if k == 0:
+        return lambda k: (np.nan, np.nan)
+
+    def _95CI(f: typing.Sequence[int]) -> typing.Tuple[float, float]:
+        est = _NJk(k)(f)
+        err = 1.96 * _seNjk(k)(f)
+        return (est - err, est + err)
+
+    return _95CI
 
 
 def test_standard_normal(value, alpha=0.05) -> bool:
@@ -165,8 +197,11 @@ def reject_h0(f: typing.Sequence[int], k: int) -> bool:
     return test_standard_normal(test_statistic)
 
 
-# TODO add CI
-def jackknife_mark_recapture_estimate(f: typing.Sequence[int]) -> float:
+# TODO
+# - implement "improved selection procedure" at end of reference
+def jackknife_mark_recapture_estimate(
+    f: typing.Sequence[int],
+) -> typing.Tuple[float, typing.Tuple[float, float]]:
     """Estimate the population size in mark-recapture studies with multiple
     recapture events using a nonparametric method based on the generalized
     jackknife approach that is robust to variability between population
@@ -185,8 +220,12 @@ def jackknife_mark_recapture_estimate(f: typing.Sequence[int]) -> float:
 
     Returns
     -------
-    float
-        An estimated value of the population size.
+    float, Tuple[float, float]
+        An estimated value of the population size and 95% confidence interval.
+
+        If estimate equals the number of distinct observed individuals, a valid
+        confidence interval cannot be computed so returned confidence interval
+        is `(nan, nan)`.
 
     Notes
     -----
@@ -209,4 +248,4 @@ def jackknife_mark_recapture_estimate(f: typing.Sequence[int]) -> float:
         if reject_h0(f, k):
             continue
         else:
-            return _NJk(k)(f)
+            return _NJk(k)(f), _95CIk(k)(f)
