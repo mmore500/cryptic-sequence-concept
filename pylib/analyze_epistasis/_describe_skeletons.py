@@ -16,12 +16,17 @@ def describe_skeletons(
     skeletonization_df = _make_skeletonization_df(skeletons_df)
     jackknifes_df = _make_jackknifes_df(skeletons, test_knockout)
 
-    return pd.DataFrame.merge(
+    res = pd.DataFrame.merge(
         skeletonization_df,
         jackknifes_df,
         how="outer",
         on=["site"],
     )
+    assert res["skeleton outcome count, excluded"].isna().sum() == 0
+    assert res["skeleton outcome frequency, excluded"].isna().sum() == 0
+    assert res["skeleton outcome count, included"].isna().sum() == 0
+    assert res["skeleton outcome frequency, included"].isna().sum() == 0
+    return res
 
 
 def _make_jackknifes_df(
@@ -136,4 +141,22 @@ def _make_skeletonization_df(skeletons_df: pd.DataFrame) -> pd.DataFrame:
         suffixes=[", excluded", ", included"],
     )
     assert len(res) == skeletons_df["site"].nunique()
-    return res
+    res.fillna(
+        {
+            "skeleton outcome count, excluded": 0,
+            "skeleton outcome frequency, excluded": 0,
+            "skeleton outcome count, included": 0,
+            "skeleton outcome frequency, included": 0,
+        },
+        inplace=True,
+    )
+    assert res["skeleton outcome count, excluded"].isna().sum() == 0
+    assert res["skeleton outcome frequency, excluded"].isna().sum() == 0
+    assert res["skeleton outcome count, included"].isna().sum() == 0
+    assert res["skeleton outcome frequency, included"].isna().sum() == 0
+    return res.astype(
+        {
+            "skeleton outcome count, excluded": int,
+            "skeleton outcome count, included": int,
+        },
+    )
