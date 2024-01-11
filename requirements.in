@@ -4,6 +4,7 @@ hstrat==1.7.4
 interval_search==0.5.2
 IPython==7.31.1
 isort==5.12.0
+iterpop==0.4.1
 matplotlib==3.6.2
 nb-clean==2.4.0
 nbconvert==7.6.0
