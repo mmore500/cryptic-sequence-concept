@@ -31,7 +31,7 @@ def _make_jackknifes_df(
             jackknife_skeleton(skeleton, test_knockout)
             for skeleton in skeletons
         )
-        if skeletons
+        if len(skeletons)  # make robust to numpy types
         else pd.DataFrame(
             {
                 "jackknife dose": [],
