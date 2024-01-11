@@ -19,6 +19,7 @@ def describe_skeletons(
     return pd.DataFrame.merge(
         skeletonization_df,
         jackknifes_df,
+        how="outer",
         on=["site"],
     )
 
@@ -77,7 +78,7 @@ def _make_skeletons_df(skeletons: typing.List[np.array]) -> np.array:
                 },
             )
 
-    return pd.DataFrame.from_records(
+    res = pd.DataFrame.from_records(
         records
         or {
             "skeleton": [],
@@ -87,6 +88,8 @@ def _make_skeletons_df(skeletons: typing.List[np.array]) -> np.array:
             "site": [],
         },
     )
+    assert len(res) == sum(map(len, skeletons))
+    return res
 
 
 def _make_skeletonization_df(skeletons_df: pd.DataFrame) -> pd.DataFrame:
@@ -116,6 +119,7 @@ def _make_skeletonization_df(skeletons_df: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
     agg_df["skeleton outcome frequency"] /= skeletons_df["skeleton"].nunique()
+    assert len(agg_df) >= skeletons_df["site"].nunique()
 
     skeleton_excluded_df = (  # cover empty case
         agg_df[agg_df["skeleton outcome"]] if len(agg_df) else agg_df
@@ -123,10 +127,13 @@ def _make_skeletonization_df(skeletons_df: pd.DataFrame) -> pd.DataFrame:
     skeleton_included_df = (
         agg_df[~agg_df["skeleton outcome"]] if len(agg_df) else agg_df
     )
-    return pd.DataFrame.merge(
+    res = pd.DataFrame.merge(
         # errors ignore covers empty case
         skeleton_excluded_df.drop("skeleton outcome", axis=1, errors="ignore"),
         skeleton_included_df.drop("skeleton outcome", axis=1, errors="ignore"),
+        how="outer",
         on=["site"],
         suffixes=[", excluded", ", included"],
     )
+    assert len(res) == skeletons_df["site"].nunique()
+    return res
