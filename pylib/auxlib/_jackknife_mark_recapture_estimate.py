@@ -235,12 +235,16 @@ def jackknife_mark_recapture_estimate(
 
     References
     ----------
+    Amstrup, Steven C., Trent L. McDonald, and Bryan FJ Manly, eds. Handbook of
+    capture-recapture analysis. Princeton University Press, 2010.
+
     Burnham, K. P., & Overton, W. S. (1979). Robust Estimation of Population
     Size When Capture Probabilities Vary Among Animals. Ecology, 60(5), 927-936.
 
     Examples
     --------
-    >>> capture_frequencies = [43, 16, 8, 6, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    >>> capture_frequencies = [
+    ...     43, 16, 8, 6, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     >>> jackknife_mark_recapture_estimate(capture_frequencies)
     158.6
     """
