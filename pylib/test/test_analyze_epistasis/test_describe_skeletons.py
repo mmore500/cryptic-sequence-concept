@@ -29,4 +29,4 @@ def test_describe_skeletons(num_skeletons: int):
     res = describe_skeletons(skeletons, genome.test_knockout)
 
     if num_skeletons:
-        assert set(res["site"]) < set(range(num_sites))
+        assert set(res["site"]) == set(range(num_sites))

@@ -14,7 +14,7 @@ def test_jackknife_skeleton():
     # Expected DataFrame structure
     expected_df = pd.DataFrame(
         {
-            "dose": [2, 2, 2],
+            "jackknife dose": [2, 2, 2],
             "raw jackknife result": [1.25, 1.25, 0.0],
             "jackknife result": [1.25, 1.25, 1.0],
             "site": [0, 2, 3],
