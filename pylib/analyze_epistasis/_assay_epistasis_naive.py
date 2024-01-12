@@ -62,10 +62,11 @@ def assay_epistasis_naive(
         jackknife_severity_thresh,
     )
     severity_mask = (
-        skeletons_description_df["jackknife result"] <= severity_thresh
+        skeletons_description_df["jackknife result"] >= severity_thresh
     )
 
-    estimate = (rarely_excluded_mask & severity_mask).sum()
+    commonly_excluded_mask = ~rarely_excluded_mask
+    estimate = (commonly_excluded_mask & severity_mask).sum()
     return {
         "num epistasis sites estimate": estimate,
         "exclusion frequency cutoff": exclusion_frequency_thresh,
