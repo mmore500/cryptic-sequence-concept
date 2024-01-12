@@ -1,0 +1,129 @@
+name: CI
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches:
+      - '**'
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+jobs:
+
+  docker-teximage-build:
+    name: Docker Tex Image Build
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0 # fetch all history for all branches and tags
+      - name: Build and Push to GitHub Container Registry
+        uses: docker/build-push-action@v1
+        with:
+          push: true
+          tags: "GITHUB_ACTION_${{ github.run_number }}_TEXIMAGE"
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          repository: mmore500/cryptic-sequence-concept
+          registry: ghcr.io
+          path: ./tex/
+          add_git_labels: true
+
+  tidy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y bibtool rename
+          npm install -g bibtex-tidy
+          python3 -m pip install pip --upgrade
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install -r docs/requirements.txt
+      - run: ./tidy/test_tidy.sh
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          python3 -m pip install pip --upgrade
+          python3 -m pip install -r requirements.txt
+      - run: ./lint.sh
+
+  test-pylib:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          python3 -m pip install pip --upgrade
+          python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -n auto pylib
+
+  test-hsurf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          python3 -m pip install pip --upgrade
+          python3 -m pip install -r requirements.txt
+      # ignore warnings to reduce memory use
+      # (there are a lot of deprecation warnings)
+      - run: python3 -m pytest -n auto -W ignore test_hsurf
+
+  test-hsurf-heavy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          python3 -m pip install pip --upgrade
+          python3 -m pip install -r requirements.txt
+      # ignore warnings to reduce memory use
+      # (there are a lot of deprecation warnings)
+      - run: python3 -m pytest -m heavy -W ignore -n auto test_hsurf
+
+  binder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ghostscript
+          python3 -m pip install pip --upgrade
+          python3 -m pip install -r requirements.txt
+      # Adapted from https://askubuntu.com/a/524368
+      - run: ./binder/execute_notebooks.sh
+      # adapted from https://unix.stackexchange.com/a/545630
+      - run: find -type f -name "*.pdf" -exec bash -c 'gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dBATCH -dQUIET -sOutputFile="new.pdf" "{}"; rm "{}"; mv "new.pdf" "{}";' {} \;
+      - run: git init
+      - uses: fregante/setup-git-user@v1
+      - run: git commit --allow-empty -m "Initial commit"
+      - run: cp -r binder/ deploy/
+      - uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: binder # The branch the action should deploy to.
+          folder: deploy # The folder the action should deploy.
+
+  latex:
+    name: Latex Build
+    runs-on: ubuntu-20.04
+    needs:
+      - docker-teximage-build
+    container:
+      image: ghcr.io/mmore500/cryptic-sequence-concept:GITHUB_ACTION_${{ github.run_number }}_TEXIMAGE
+      # github actions requires root to access mounted volumes
+      options: --user root
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+      - run: make -C /opt/cryptic-sequence-concept/tex
+      - name: Upload output as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: manuscript
+          path: /opt/cryptic-sequence-concept/tex/cryptic-sequence-concept-draft.pdf
