@@ -3,7 +3,8 @@ import warnings
 
 import numpy as np
 from scipy.optimize import brute as scipy_brute  # grid search
-from scipy.stats import nbinom as scipy_negative_binomial
+
+from ..auxlib._nbinom_cdf import nbinom_cdf
 
 
 def fit_negbinom_quantiles(
@@ -54,7 +55,7 @@ def fit_negbinom_quantiles(
         r, p = params
         assert r > 0 and p > 0
         error = sum(
-            (scipy_negative_binomial.cdf(v, int(r), p / pnorm) - q) ** 2
+            (nbinom_cdf(v, int(r), p / pnorm) - q) ** 2
             for v, q in zip(
                 distribution_values, cumulative_probabilities, strict=True
             )
@@ -73,8 +74,7 @@ def fit_negbinom_quantiles(
     assert best_r > 0
     assert 0 <= best_p / pnorm <= 1.0
     fit_quantiles = [
-        scipy_negative_binomial.cdf(q, best_r, best_p / pnorm)
-        for q in distribution_values
+        nbinom_cdf(q, best_r, best_p / pnorm) for q in distribution_values
     ]
 
     # warn if the best parameters are at the edge of the search range

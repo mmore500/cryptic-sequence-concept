@@ -1,13 +1,13 @@
 import numpy as np
-from scipy.stats import nbinom as scipy_negative_binomial
 
 from pylib.analyze_additive import fit_negbinom_quantiles
+from pylib.auxlib._nbinom_cdf import nbinom_cdf
 
 
 def test_fit_negbinom_quantiles_exact():
     n, p = 10, 0.44
-    cumulative_probabilities = np.array([0.14, 0.34, 0.63, 0.8])
-    counts = scipy_negative_binomial.ppf(cumulative_probabilities, n, p)
+    counts = np.array([20, 30, 35, 40])
+    cumulative_probabilities = nbinom_cdf(counts, n, p)
     result = fit_negbinom_quantiles(counts, cumulative_probabilities)
     assert isinstance(result, dict)
     assert "r" in result and "p" in result
@@ -18,10 +18,12 @@ def test_fit_negbinom_quantiles_exact():
 
 def test_fit_negbinom_quantiles_noised():
     n, p = 3, 0.05
-    quantiles = np.array([0.4, 0.5, 0.8])
-    counts = scipy_negative_binomial.ppf(quantiles, n, p)
+    counts = np.array([30, 40, 50])
+    cumulative_probabilities = nbinom_cdf(counts, n, p)
     noise = np.array([0.01, -0.02, 0.0])
-    result = fit_negbinom_quantiles(counts, quantiles + noise)
+    result = fit_negbinom_quantiles(
+        counts, np.clip(cumulative_probabilities + noise, 0, 1)
+    )
     assert isinstance(result, dict)
     assert "r" in result and "p" in result
     assert 2 < result["r"] < 5
