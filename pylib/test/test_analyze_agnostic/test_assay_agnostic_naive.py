@@ -6,7 +6,6 @@ from pylib.analyze_epistasis import (
     describe_skeletons,
     skeletonize_naive,
 )
-from pylib.modelsys_explicit import GenomeExplicit
 from pylib.modelsys_explicit import (
     CalcKnockoutEffectsAdditive,
     CalcKnockoutEffectsEpistasis,

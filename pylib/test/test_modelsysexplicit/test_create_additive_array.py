@@ -1,5 +1,5 @@
-import pytest
 import numpy as np
+import pytest
 
 from pylib.modelsys_explicit import create_additive_array
 

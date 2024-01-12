@@ -2,8 +2,8 @@ import typing
 import warnings
 
 import numpy as np
-from scipy.stats import nbinom as scipy_negative_binomial
 from scipy.optimize import brute as scipy_brute  # grid search
+from scipy.stats import nbinom as scipy_negative_binomial
 
 
 def fit_negbinom_quantiles(
