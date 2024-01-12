@@ -19,7 +19,7 @@ from pylib.modelsys_explicit import (
 
 def test_assay_agnostic_naive_smoke():
     num_sites = 1000
-    distn = lambda x: np.random.rand(x) * 0.7
+    distn = lambda x: np.random.rand(x) * 0.7  # noqa: E731
     additive_array = create_additive_array(num_sites, 0.04, distn)
     epistasis_matrix = create_epistasis_matrix_disjoint(num_sites, 40, 4)
     genome = GenomeExplicit(

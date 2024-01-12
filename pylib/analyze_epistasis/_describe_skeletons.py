@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 
 from ._jackknife_skeleton import jackknife_skeleton
-from ._skeletonize_naive import skeletonize_naive
 
 
 def describe_skeletons(
