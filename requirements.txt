@@ -41,8 +41,10 @@ comm==0.1.3
     # via ipykernel
 contourpy==1.1.0
     # via matplotlib
-cycler==0.11.0
-    # via matplotlib
+cycler==0.12.1
+    # via
+    #   -r requirements.in
+    #   matplotlib
 dataclasses==0.6
     # via lyncs-utils
 debugpy==1.6.7
