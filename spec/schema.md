@@ -15,6 +15,7 @@ for job report-back and data storage
 ### `submissions`
 - `assayIds`: list of strings, assay UUIDs
 - `assayTypes`: list of strings (enum)
+- `competitionTimeoutSeconds`: int
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
@@ -66,63 +67,50 @@ for job report-back and data storage
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
-### `competitionAttempts`
-- `assayId`: string, assay UUID (listed twice, might be an inconsistency)
-- `datetime`: string, ISO 8601
-- `id`: string, RFC 4122 UUID (corresponding to entry in `competitions`)
-- `knockoutSites`: list of int
-- `revisionKnockem`: string, short git commit hash
-- `submissionId`: string, submission UUID
-- `userEmail`: string, email
-
-### `competitionAttemptResults`
-- `assayId`: string, assay UUID
-- `competitionId`: string, competition UUID
-- `datetime`: string, ISO 8601
-- `id`: string, RFC 4122 UUID (corresponding to entry in `competitionResults`)
-- `revisionKnockem`: string, short git commit hash
-- `result`:
-    - `updatesElapsed`: numeric
-    - `numAlpha`: int
-    - `numBeta`: int
-- `submissionId`: string, submission UUID
-- `userEmail`: string, email
-
 ## redis database
 
 for server job orchestration
 
 ### `activeSubmissions`
 - `assayIds`: list of strings, assay UUIDs
+- `competitionTimeoutSeconds`: int
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `genomeId`: string
 - `id`: string, RFC 4122 UUID
+- `maxActive`: int
+- `maxFail`: int
 - `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
 ### `pendingAssays`
 - `assayId`: string, assay UUID
+- `competitionTimeoutSeconds`: int
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `dependsOnAssayIds`: list of strings, assay UUIDs
 - `genomeId`: string
 - `id`: string, RFC 4122 UUID
+- `maxActive`: int
+- `maxFail`: int
 - `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
 ### `activeAssays`
 - `assayId`: string, assay UUID
+- `competitionTimeoutSeconds`: int
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `dependsOnCompetitionIds`: list of strings, competition UUID
 - `genomeId`: string
 - `id`: string, RFC 4122 UUID
+- `maxActive`: int
+- `maxFail`: int
 - `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
@@ -131,54 +119,44 @@ for server job orchestration
 - `assayId`: string, assay UUID
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
+- `competitionTimeoutSeconds`: int
 - `datetime`: string, ISO 8601
-- `dependsOnCompetitionAttemptId`: string, competition attempt UUID
 - `genomeIdAlpha`: string
 - `genomeIdBeta`: string
 - `id`: string, RFC 4122 UUID
 - `knockoutSites`: list of int
+- `maxActive`: int
+- `maxFail`: int
 - `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
-### `pendingCompetitionAttempts`
+### `pendingCompetitions`
 - `assayId`: string, assay UUID
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
+- `competitionTimeoutSeconds`: int
 - `datetime`: string, ISO 8601
 - `genomeIdAlpha`: string
 - `genomeIdBeta`: string
 - `id`: string, RFC 4122 UUID
 - `knockoutSites`: list of int
+- `maxActive`: int
+- `maxFail`: int
 - `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
-- `timeoutSeconds`: int
-- `userEmail`: string, email
-
-### `activeCompetitionAttempts`
-- `assayId`: string, assay UUID
-- `containerEnv`: map of string to string
-- `containerImage`: string, Docker Hub image name or a registry name
-- `datetime`: string, ISO 8601
-- `genomeIdAlpha`: string
-- `genomeIdBeta`: string
-- `id`: string, RFC 4122 UUID
-- `knockoutSites`: list of int
-- `revisionKnockem`: string, short git commit hash
-- `submissionId`: string, submission UUID
-- `timeoutSeconds`: int
 - `userEmail`: string, email
 
 ### atomic counters
 
 for progress reports
 
-- `submissionNumPendingAssays`
-- `submissionNumActiveAssays`
-- `submissionNumCompletedAssays`
-- `submissionNumPendingCompetitions`
 - `submissionNumActiveCompetitions`
+- `submissionNumFailedCompetitions`
+
+maybe also in the future,
 - `submissionNumCompletedCompetitions`
+- `submissionNumPendingCompetitions`
 
 ## Assay Types enum
 

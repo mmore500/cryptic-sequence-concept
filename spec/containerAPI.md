@@ -53,4 +53,5 @@ responsibilities:
 - run competition
 - upload competition results to database to `competitionAttemptResults`
     - invoke `knockem.cli report-competition "{updatesElapsed}" "{numAlpha}" "{numBeta}"`
+    - will only upload competition result if it is not present
     - on success, deletes ephemeral genomes from database
