@@ -5,6 +5,8 @@ for job report-back and data storage
 ### `genomes`
 - `content`: string
 - `datetime`: string, ISO 8601
+- `isEphemeral`: boolean (should genome be deleted after download?)
+    - should genome be deleted after use?
 - `id`: string, RFC 4122 UUID
 - `numSites`: int
 - `revisionKnockem`: string, short git commit hash
@@ -13,6 +15,7 @@ for job report-back and data storage
 ### `submissions`
 - `assayIds`: list of strings, assay UUIDs
 - `assayTypes`: list of strings (enum)
+- `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `genomeId`: string
@@ -22,12 +25,11 @@ for job report-back and data storage
 - `revisionKnockem`: string, short git commit hash
 - `userEmail`: string, email
 
-Inconsistencies/Notes:
-- The `shell` requirement is not listed within the attributes but is mentioned as required in the user submission.
-
 ### `assays`
 - `assayType`: string (enum)
 - `competitionIDs`: list of strings, competition UUIDs
+- `containerEnv`: map of string to string
+- `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID
 - `revisionKnockem`: string, short git commit hash
@@ -37,7 +39,7 @@ Inconsistencies/Notes:
 ### `assayResults`
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID (corresponding to entry in `assays`)
-- `result`: string, JSON
+- `result`: JSON
 - `revisionKnockem`: string, short git commit hash
 
 ### `competitions`
@@ -54,7 +56,12 @@ Inconsistencies/Notes:
 - `competitionAttemptId`: string, RFC 4122 UUID
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID (corresponding to entry in `competitions`)
-- `result`: string, JSON
+- `knockoutSites`: list of int
+- `numKnockoutSites`: list of int
+- `result`:
+    - `updatesElapsed`: numeric
+    - `numAlpha`: int
+    - `numBeta`: int
 - `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
@@ -74,7 +81,10 @@ Inconsistencies/Notes:
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID (corresponding to entry in `competitionResults`)
 - `revisionKnockem`: string, short git commit hash
-- `result`: string, JSON
+- `result`:
+    - `updatesElapsed`: numeric
+    - `numAlpha`: int
+    - `numBeta`: int
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
@@ -84,6 +94,8 @@ for server job orchestration
 
 ### `activeSubmissions`
 - `assayIds`: list of strings, assay UUIDs
+- `containerEnv`: map of string to string
+- `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `genomeId`: string
 - `id`: string, RFC 4122 UUID
@@ -93,6 +105,8 @@ for server job orchestration
 
 ### `pendingAssays`
 - `assayId`: string, assay UUID
+- `containerEnv`: map of string to string
+- `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `dependsOnAssayIds`: list of strings, assay UUIDs
 - `genomeId`: string
@@ -103,6 +117,8 @@ for server job orchestration
 
 ### `activeAssays`
 - `assayId`: string, assay UUID
+- `containerEnv`: map of string to string
+- `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `dependsOnCompetitionIds`: list of strings, competition UUID
 - `genomeId`: string
@@ -113,9 +129,12 @@ for server job orchestration
 
 ### `activeCompetitions`
 - `assayId`: string, assay UUID
+- `containerEnv`: map of string to string
+- `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `dependsOnCompetitionAttemptId`: string, competition attempt UUID
-- `genomeId`: string
+- `genomeIdAlpha`: string
+- `genomeIdBeta`: string
 - `id`: string, RFC 4122 UUID
 - `knockoutSites`: list of int
 - `revisionKnockem`: string, short git commit hash
@@ -124,8 +143,11 @@ for server job orchestration
 
 ### `pendingCompetitionAttempts`
 - `assayId`: string, assay UUID
+- `containerEnv`: map of string to string
+- `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
-- `genomeId`: string
+- `genomeIdAlpha`: string
+- `genomeIdBeta`: string
 - `id`: string, RFC 4122 UUID
 - `knockoutSites`: list of int
 - `revisionKnockem`: string, short git commit hash
@@ -135,8 +157,11 @@ for server job orchestration
 
 ### `activeCompetitionAttempts`
 - `assayId`: string, assay UUID
+- `containerEnv`: map of string to string
+- `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
-- `genomeId`: string
+- `genomeIdAlpha`: string
+- `genomeIdBeta`: string
 - `id`: string, RFC 4122 UUID
 - `knockoutSites`: list of int
 - `revisionKnockem`: string, short git commit hash
