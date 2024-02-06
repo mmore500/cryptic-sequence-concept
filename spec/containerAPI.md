@@ -1,4 +1,4 @@
-## `knockem_knockout`
+## `knockem_apply_knockout`
 
 args:
 - `sites`... (int)
@@ -9,25 +9,49 @@ stdin:
 stdout: (expected)
 - `knocked out genome content` (str)
 
+env:
+- any custom environment settings passed via `containerEnv`
+
 invocation:
 ```
 singularity run {containerImage} \
-    knockem_knockout {site1} {site2} ... \
+    knockem__apply_knockout {site1} {site2} ... \
+    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ...
     < {genomeContent} > output.genome
 ```
 
-## `knockem_compete`
+## `knockem_count_sites`
+
+args: none
+
+stdin:
+- `genome content` (str)
+
+stdout: (expected)
+- `num genome sites` (int)
+
+env:
+- any custom environment settings passed via `containerEnv`
+
+invocation:
+```
+singularity run {containerImage} \
+    knockem_count_sites \
+    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ...
+    < {genomeContent} > output.count
+```
+
+## `knockem_compete_two`
 
 env:
 - `KNOCKEM_ASSAY_ID` (str)
 - `KNOCKEM_COMPETITION_ID` (str)
 - `KNOCKEM_COMPETITION_ATTEMPT_ID` (str)
-- `KNOCKEM_DATABASE_URI` (str)
-- `KNOCKEM_DATABASE_CREDENTIAL` (str)
-- `KNOCKEM_EPHEMERAL_GENOME_IDS` (space-separated str with ephemeral genome IDs)
+- `KNOCKEM_RECORDS_URI` (str)
+- `KNOCKEM_RECORDS_CREDENTIAL` (str)
 - `KNOCKEM_GENOME_ID_ALPHA` (str)
 - `KNOCKEM_GENOME_ID_BETA` (str)
-- `KNOCKEM_REVISION` (str)
+- `KNOCKEM_RUNMODE` (str)
 - `KNOCKEM_SUBMISSION_ID` (str)
 - `KNOCKEM_USER_EMAIL` (str)
 - any custom environment settings passed via `containerEnv`
@@ -35,14 +59,16 @@ env:
 invocation:
 ```
 singularity run {containerImage} \
-    knockem_compete "{genomeIdAlpha}" "{genomeIdBeta}" \
+    knockem_compete_two \
     --env KNOCKEM_ASSAY_ID='{assayId}' \
     --env KNOCKEM_COMPETITION_ID='{competitionId}' \
     --env KNOCKEM_COMPETITION_ATTEMPT_ID='{competitionAttemptId}' \
-    --env KNOCKEM_DATABASE_URI='{databaseUri}' \
-    --env KNOCKEM_DATABASE_CREDENTIAL='{databaseCredential}' \
-    --env KNOCKEM_REVISION='{revision}' \
+    --env KNOCKEM_RECORDS_URI='{databaseUri}' \
+    --env KNOCKEM_RECORDS_CREDENTIAL='{databaseCredential}' \
+    --env KNOCKEM_GENOME_ID_ALPHA='{genomeIdAlpha}' \
+    --env KNOCKEM_GENOME_ID_BETA='{genomeIdBeta}' \
     --env KNOCKEM_SUBMISSION_ID='{submissionId}' \
+    --env KNOCKEM_RUNMODE='{knockemRunmode}' \
     --env KNOCKEM_USER_EMAIL='{userEmail}' \
     --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ...
 ```

@@ -21,9 +21,9 @@ paths:
               required:
                 - containerEnv
                 - containerImage
-                - genomeId
-                - maxActive
-                - maxFail
+                - genomeContent
+                - maxCompetitionsActive
+                - maxCompetitionsFail
                 - userEmail
               properties:
                 containerEnv:
@@ -37,14 +37,20 @@ paths:
                     - "yourorg/yourimage:tag"
                     - "ghcr.io:yourorg/yourimage:tag"
                   description: see `spec/containerAPI.md` for details
-                genomeId:
+                genomeContentAlpha:
                   type: string
-                  example: "550e8400-e29b-41d4-a716-44665544000"
-                maxActive:
+                  example: |
+                    Search
+                    Nop-C
+                    Nop-D
+                    Push-Prev
+                    SetMemory
+                    Nop-A
+                maxCompetitionsActive:
                   type: integer
                   format: int32
                   example: 5
-                maxFail:
+                maxCompetitionsFail:
                   type: integer
                   format: int32
                   example: 3
@@ -69,38 +75,3 @@ paths:
           description: Invalid input
         500:
           description: Internal server error
-  /genomes/:
-    post:
-      summary: Submit Genome
-      operationId: add_genome
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                genome:
-                  type: string
-                  example: |
-                    Search
-                    Nop-C
-                    Nop-D
-                    Push-Prev
-                    SetMemory
-                    Nop-A
-                numSites:
-                  type: int
-                  example: "7"
-              required:
-                - genome
-      responses:
-        200:
-          description: Genome submission receipt
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  genomeId:
-                    type: string
