@@ -1,5 +1,6 @@
 import functools
 import os
+import typing
 import warnings
 
 import dataset
@@ -232,3 +233,16 @@ def get_num_pending_competitions(submissionId: str) -> int:
     table = get_competitions_table()
     with get_db() as tx:
         return tx[table].count(submissionId=submissionId, status="pending")
+
+
+# cleanup =====================================================================
+def purge_submission(submissionId: str) -> None:
+    with get_db() as tx:
+        for table in tx.tables:
+            table.delete(submissionId=submissionId)
+
+
+def purge_testing() -> None:
+    with get_db() as tx:
+        for table in tx.tables:
+            table.delete(knockemRunmode="testing")
