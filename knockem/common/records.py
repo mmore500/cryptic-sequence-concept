@@ -19,30 +19,33 @@ def get_db():
 
 
 # genomes =====================================================================
-def add_genome(genomeContent: str, submissionId: str, userEmail: str) -> str:
+def add_genome(
+    genomeContent: str, isEphemeral: bool, submissionId: str, userEmail: str
+) -> str:
     row = with_common_columns(
+        "genomeId",
         "_id",
         genomeContent=genomeContent,
+        isEphemeral=isEphemeral,
         submissionId=submissionId,
         userEmail=userEmail,
     )
-    row["genomeId"] = row["_id"]
     get_db().genomes.insert_one(row)
-    return row["_id"]
+    return row["genomeId"]
 
 
 def delete_genome_document(genomeId: str) -> None:
-    get_db().genomes.delete_one({"_id": genomeId})
+    get_db().genomes.delete_one({"genomeId": genomeId})
 
 
 def get_genome_document(genomeId: str) -> dict:
-    return get_db().genomes.find_one({"_id": genomeId})
+    return get_db().genomes.find_one({"genomeId": genomeId})
 
 
 def is_genome_ephemeral(genomeId: str) -> bool:
     return bool(
         get_db().competitionResults.count_documents(
-            {"_id": genomeId, "isEphemeral": True},
+            {"genomeId": genomeId, "isEphemeral": True},
             limit=1,
         ),
     )
