@@ -27,7 +27,7 @@ def _run_competition(document: dict) -> None:
         [
             "singularity",
             "run",
-            document["containerImage"],
+            f"docker://{document['containerImage']}",
             "knockem_compete_two",
             "--env",
             'KNOCKEM_RECORDS_CREDENTIAL="${KNOCKEM_RECORDS_CREDENTIAL}"',
