@@ -90,11 +90,14 @@ paths:
               schema:
                 type: object
                 required:
+                  - assayResults
                   - numActiveCompetitions
                   - numCompletedCompetitions
                   - numFailedCompetitions
                   - numPendingCompetitions
                 properties:
+                  assayResults:
+                    type: array
                   numActiveCompetitions:
                     type: integer
                     format: int32
@@ -107,6 +110,9 @@ paths:
                   numPendingCompetitions:
                     type: integer
                     format: int32
+                  submissionId:
+                    type: string
+                    example: "550e8400-e29b-41d4-a716-44665544000"
         400:
           description: Invalid input
         500:

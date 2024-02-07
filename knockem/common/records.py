@@ -137,6 +137,14 @@ def has_assay_result(assayId: str) -> bool:
     )
 
 
+def get_submission_assay_results(submissionId: str) -> list[dict]:
+    return list(
+        get_db().assayResults.find(
+            {"submissionId": submissionId},
+        ),
+    )
+
+
 # competitios =================================================================
 def add_competition(
     assayId: str,
