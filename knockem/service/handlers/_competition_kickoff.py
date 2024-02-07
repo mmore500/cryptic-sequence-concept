@@ -23,18 +23,22 @@ def _run_competition(document: dict) -> None:
         for key, value in knockem_env.items()
         for elem in ["--env", f"{key}='{value}'"]
     ]
-    subprocess.Popen(
+    command = (
         [
             "singularity",
             "run",
-            f"docker://{document['containerImage']}",
-            "knockem_compete_two",
             "--env",
             'KNOCKEM_RECORDS_URI="${KNOCKEM_RECORDS_URI}"',
         ]
         + knockem_env
-        + document["containerEnv"].split(),
+        + document["containerEnv"].split()
+        + [
+            f"docker://{document['containerImage']}",
+            "knockem_compete_two",
+        ]
     )
+    logging.info(f"Running competition with command: {' '.join(command)}")
+    subprocess.Popen(command)
 
 
 def competition_kickoff() -> int:
