@@ -13,7 +13,7 @@ def assay_kickoff() -> int:
         document = orch.get_assay_document(assayId)
         if document["assayType"] == "nulldist":
             competitions = [
-                (document["genomeIdAlpha"], document["genomeIdAlpha"])
+                (document["genomeIdAlpha"], document["genomeIdAlpha"], "")
                 for __ in range(100)
             ]
         else:
@@ -26,19 +26,26 @@ def assay_kickoff() -> int:
                 assayId=assayId,
                 genomeIdAlpha=alpha,
                 genomeIdBeta=beta,
+                knockoutSites=ko,
                 submissionId=document["submissionId"],
                 userEmail=document["userEmail"],
             )
-            for alpha, beta in competitions
+            for alpha, beta, ko in competitions
         ]
-        for competitionId, (alpha, beta) in zip(competitionIds, competitions):
+        for competitionId, (alpha, beta, ko) in zip(
+            competitionIds, competitions
+        ):
             orch.enqueue_competition(
                 assayId=assayId,
                 competitionId=competitionId,
+                competitionTimeoutSeconds=document["competitionTimeoutSeconds"],
+                containerEnv=document["containerEnv"],
+                containerImage=document["containerImage"],
                 genomeIdAlpha=alpha,
                 genomeIdBeta=beta,
+                knockoutSites=ko,
                 maxCompetitionsActive=document["maxCompetitionsActive"],
-                maxCompetitionsFail=document["maxCompetitionsFail"],
+                maxCompetitionRetries=document["maxCompetitionRetries"],
                 submissionId=document["submissionId"],
                 userEmail=document["userEmail"],
             )

@@ -41,7 +41,7 @@ def competition_kickoff() -> int:
     for competitionId in orch.iter_pending_competitionIds():
         document = orch.get_competition_document(competitionId)
         if (
-            orch.get_num_active_competitions()
+            orch.get_num_active_competitions(document["submissionId"])
             >= document["maxCompetitionsActive"]
         ):
             continue

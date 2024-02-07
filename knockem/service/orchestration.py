@@ -10,7 +10,7 @@ from ..common.meta import get_runmode, with_common_columns
 
 
 def _get_time() -> int:
-    time.time_ns() // 1000000000
+    return time.time_ns() // 1000000000
 
 
 @functools.lru_cache
