@@ -27,8 +27,8 @@ def _run_competition(document: dict) -> None:
         [
             "singularity",
             "run",
-            "--env",
-            'KNOCKEM_RECORDS_URI="${KNOCKEM_RECORDS_URI}"',
+            # "--env",  # this should already be in env and get passed thru
+            # 'KNOCKEM_RECORDS_URI="${KNOCKEM_RECORDS_URI}"',
         ]
         + knockem_env
         + document["containerEnv"].split()
