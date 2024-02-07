@@ -1,10 +1,19 @@
+import functools
+import os
+
 from pymongo import MongoClient
 
 from .meta import with_common_columns
 
 
+@functools.lru_cache
 def get_db():
-    return MongoClient().knockem
+    env_key = "KNOCKEM_RECORDS_URI"
+    if env_key not in os.environ:
+        raise ValueError(f"Environment variable {env_key} is not set.")
+
+    uri = os.environ["KNOCKEM_RECORDS_URI"]
+    return MongoClient(uri).knockem
 
 
 # genomes =====================================================================

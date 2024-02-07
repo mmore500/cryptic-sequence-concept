@@ -49,8 +49,7 @@ env:
 - `KNOCKEM_ASSAY_ID` (str)
 - `KNOCKEM_COMPETITION_ID` (str)
 - `KNOCKEM_COMPETITION_ATTEMPT_ID` (str)
-- `KNOCKEM_RECORDS_URI` (str)
-- `KNOCKEM_RECORDS_CREDENTIAL` (str)
+- `KNOCKEM_RECORDS_URI` (str), contains credential
 - `KNOCKEM_GENOME_ID_ALPHA` (str)
 - `KNOCKEM_GENOME_ID_BETA` (str)
 - `KNOCKEM_RUNMODE` (str)
@@ -66,7 +65,6 @@ singularity run {containerImage} \
     --env KNOCKEM_COMPETITION_ID='{competitionId}' \
     --env KNOCKEM_COMPETITION_ATTEMPT_ID='{competitionAttemptId}' \
     --env KNOCKEM_RECORDS_URI='{databaseUri}' \
-    --env KNOCKEM_RECORDS_CREDENTIAL='{databaseCredential}' \
     --env KNOCKEM_GENOME_ID_ALPHA='{genomeIdAlpha}' \
     --env KNOCKEM_GENOME_ID_BETA='{genomeIdBeta}' \
     --env KNOCKEM_SUBMISSION_ID='{submissionId}' \
