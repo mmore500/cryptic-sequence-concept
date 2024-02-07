@@ -1,4 +1,3 @@
-import datetime
 import functools
 import os
 import time
@@ -7,7 +6,7 @@ import warnings
 
 import dataset
 
-from .meta import with_common_columns
+from ..common.meta import with_common_columns
 
 
 def _get_time() -> int:
@@ -15,7 +14,7 @@ def _get_time() -> int:
 
 
 @functools.lru_cache
-def get_db() -> dataset.DataBase:
+def get_db() -> dataset.Database:
     if "PYTEST_CURRENT_TEST" in os.environ:
         return dataset.connect("sqlite:///knockem-testing.db")
     else:

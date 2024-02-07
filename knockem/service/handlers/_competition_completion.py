@@ -1,7 +1,7 @@
 import logging
 
 from .. import orchestration as orch
-from .. import records as rec
+from ...common import records as rec
 
 
 def competition_completion() -> int:

@@ -13,7 +13,7 @@ classifiers = [
 ]
 # end-user requirements
 dependencies = [
-    "connexion",
+    "connexion[uvicorn,swagger-ui]",
     "dataset",
     "hstrat",
     "interval_search",
