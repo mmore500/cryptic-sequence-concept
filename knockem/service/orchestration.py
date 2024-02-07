@@ -38,6 +38,10 @@ def get_submissions_table() -> str:
     return "submissions"
 
 
+def get_users_table() -> str:
+    return "users"
+
+
 # submissions =================================================================
 def add_submission(
     competitionTimeoutSeconds: int,
@@ -326,3 +330,18 @@ def purge_testing() -> None:
     with get_db() as tx:
         for table in tx.tables:
             tx[table].delete(knockemRunmode="testing")
+
+
+# users =======================================================================
+def add_user(userEmail: str) -> str:
+    row = with_common_columns("userId", userEmail=userEmail)
+    table = get_users_table()
+    with get_db() as tx:
+        tx[table].insert(row)
+    return row["userId"]
+
+
+def has_user(userEmail: str) -> bool:
+    table = get_users_table()
+    with get_db() as tx:
+        return bool(tx[table].count(userEmail=userEmail))
