@@ -6,7 +6,7 @@ import warnings
 
 import dataset
 
-from ..common.meta import with_common_columns
+from ..common.meta import get_runmode, with_common_columns
 
 
 def _get_time() -> int:
@@ -15,10 +15,9 @@ def _get_time() -> int:
 
 @functools.lru_cache
 def get_db() -> dataset.Database:
-    if "PYTEST_CURRENT_TEST" in os.environ:
+    if get_runmode() == "testing":
         return dataset.connect("sqlite:///knockem-testing.db")
     else:
-        # Default Redis connection
         return dataset.connect("sqlite:///knockem-production.db")
 
 
@@ -320,10 +319,10 @@ def get_num_pending_competitions(submissionId: str) -> int:
 def purge_submission(submissionId: str) -> None:
     with get_db() as tx:
         for table in tx.tables:
-            table.delete(submissionId=submissionId)
+            tx[table].delete(submissionId=submissionId)
 
 
 def purge_testing() -> None:
     with get_db() as tx:
         for table in tx.tables:
-            table.delete(knockemRunmode="testing")
+            tx[table].delete(knockemRunmode="testing")
