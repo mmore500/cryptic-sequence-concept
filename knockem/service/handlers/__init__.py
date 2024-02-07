@@ -32,6 +32,3 @@ def run_handlers() -> int:
             submission_fail(),
         )
     )
-
-
-del logging  # prevent name leakage

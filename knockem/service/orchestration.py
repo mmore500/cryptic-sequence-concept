@@ -147,11 +147,22 @@ def enqueue_assay(
         status="pending",
         userEmail=userEmail,
     )
+    table = get_assays_table()
     with get_db() as tx:
-        tx[get_assays_table()].insert(row)
-        add_dependency(dependedById=submissionId, dependsOnId=row["id"])
+        tx[table].insert(row)
+        add_dependency(
+            dependedById=submissionId,
+            dependsOnId=row["assayId"],
+            submissionId=submissionId,
+            userEmail=userEmail,
+        )
         for dependsOnId in dependsOnIds:
-            add_dependency(dependedById=row["id"], dependsOnId=dependsOnId)
+            add_dependency(
+                dependedById=row["assayId"],
+                dependsOnId=dependsOnId,
+                submissionId=submissionId,
+                userEmail=userEmail,
+            )
 
 
 def get_assay_document(assayId: str) -> dict:
@@ -160,14 +171,14 @@ def get_assay_document(assayId: str) -> dict:
         return tx[table].find_one(assayId=assayId)
 
 
-def iter_active_assayIds() -> typing.List[str]:
+def iter_active_assayIds() -> typing.Iterator[str]:
     table = get_assays_table()
     with get_db() as tx:
         for row in tx[table].find(status="active"):
             yield row["assayId"]
 
 
-def iter_pending_assayIds() -> typing.List[str]:
+def iter_pending_assayIds() -> typing.Iterator[str]:
     table = get_assays_table()
     with get_db() as tx:
         for row in tx[table].find(status="pending"):
@@ -234,7 +245,12 @@ def enqueue_competition(
     )
     with get_db() as tx:
         tx[get_competitions_table()].insert(row)
-        add_dependency(dependedById=assayId, dependsOnId=row["id"])
+        add_dependency(
+            dependedById=assayId,
+            dependsOnId=row["competitionId"],
+            submissionId=submissionId,
+            userEmail=userEmail,
+        )
 
 
 def complete_competition(competitionId: str) -> None:
@@ -263,24 +279,30 @@ def get_competition_document(competitionId: str) -> dict:
         return tx[table].find_one(competitionId=competitionId)
 
 
-def iter_pending_competitionIds() -> typing.List[str]:
+def iter_active_competitionIds() -> typing.List[str]:
     table = get_competitions_table()
     with get_db() as tx:
         for row in tx[table].find(status="active"):
-            yield row["assayId"]
+            yield row["competitionId"]
 
 
-def iter_pending_assayIds() -> typing.List[str]:
+def iter_pending_competitionIds() -> typing.List[str]:
     table = get_competitions_table()
     with get_db() as tx:
         for row in tx[table].find(status="pending"):
-            yield row["assayId"]
+            yield row["competitionId"]
 
 
 # dependencies =================================================================
-def add_dependency(dependedById: str, dependsOnId: str) -> str:
+def add_dependency(
+    dependedById: str, dependsOnId: str, submissionId: str, userEmail: str
+) -> str:
     row = with_common_columns(
-        "dependencyId", dependedById=dependedById, dependsOnId=dependsOnId
+        "dependencyId",
+        dependedById=dependedById,
+        dependsOnId=dependsOnId,
+        submissionId=submissionId,
+        userEmail=userEmail,
     )
     table = get_dependencies_table()
     with get_db() as tx:
@@ -301,6 +323,36 @@ def resolve_dependencies_on(dependsOnId: str) -> None:
 
 
 # counters ====================================================================
+def get_num_dependencies(submissionId: str) -> int:
+    table = get_dependencies_table()
+    with get_db() as tx:
+        return tx[table].count(submissionId=submissionId)
+
+
+def get_num_active_assays(submissionId: str) -> int:
+    table = get_assays_table()
+    with get_db() as tx:
+        return tx[table].count(submissionId=submissionId, status="active")
+
+
+def get_num_completed_assays(submissionId: str) -> int:
+    table = get_assays_table()
+    with get_db() as tx:
+        return tx[table].count(submissionId=submissionId, status="completed")
+
+
+def get_num_failed_assays(submissionId: str) -> int:
+    table = get_assays_table()
+    with get_db() as tx:
+        return tx[table].count(submissionId=submissionId, status="failed")
+
+
+def get_num_pending_assays(submissionId: str) -> int:
+    table = get_assays_table()
+    with get_db() as tx:
+        return tx[table].count(submissionId=submissionId, status="pending")
+
+
 def get_num_active_competitions(submissionId: str) -> int:
     table = get_competitions_table()
     with get_db() as tx:

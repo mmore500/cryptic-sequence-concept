@@ -91,6 +91,11 @@ paths:
                 type: object
                 required:
                   - assayResults
+                  - numDependencies
+                  - numActiveAssays
+                  - numCompletedAssays
+                  - numFailedAssays
+                  - numPendingAssays
                   - numActiveCompetitions
                   - numCompletedCompetitions
                   - numFailedCompetitions
@@ -98,6 +103,21 @@ paths:
                 properties:
                   assayResults:
                     type: array
+                  numDependencies:
+                    type: integer
+                    format: int32
+                  numActiveAssays:
+                    type: integer
+                    format: int32
+                  numCompletedAssays:
+                    type: integer
+                    format: int32
+                  numFailedAssays:
+                    type: integer
+                    format: int32
+                  numPendingAssays:
+                    type: integer
+                    format: int32
                   numActiveCompetitions:
                     type: integer
                     format: int32
