@@ -12,5 +12,7 @@ updatesElapsed=100
 numAlpha="$(awk "BEGIN {print 1000 * $sum_alpha / ($sum_alpha + $sum_beta)}")"
 numBeta="$(awk "BEGIN {print 1000 * $sum_beta / ($sum_alpha + $sum_beta)}")"
 
+sleep 5
+
 # Report competition results
 python3 -m knockem.cli report-competition "${updatesElapsed}" "${numAlpha}" "${numBeta}"
