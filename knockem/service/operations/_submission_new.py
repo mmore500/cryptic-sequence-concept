@@ -26,6 +26,12 @@ def _submission_new(
     if not has_user(userEmail):
         raise BadRequestProblem(f"User {userEmail} is not registered.")
 
+    containerEnv = " ".join(
+        elem
+        for key, value in containerEnv.items()
+        for elem in ["--env", f"{key}='{value}'"]
+    )
+
     submissionId = str(uuid.uuid4())
     genomeId = add_genome(
         genomeContent=genomeContentAlpha,
