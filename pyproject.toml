@@ -1,3 +1,96 @@
+[project]
+authors = [
+  {name = "Matthew Andres Moreno", email="m.more500@gmail.com"},
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+# end-user requirements
+dependencies = [
+    "connexion",
+    "dataset",
+    "hstrat",
+    "interval_search",
+    "iterpop",
+    "numpy",
+    "opytional",
+    "pandas",
+    "scipy",
+    "UniformSumDistribution",
+    "pymongo",
+    "schedule",
+]
+description = "knockem estimates cryptic sequence complexity using knockout experiments"
+license = {text = "MIT license"}
+name  =  "knockem"
+keywords = [
+  "knockem",
+]
+requires-python = ">=3.10"
+version = "0.0.0"
+
+[project.optional-dependencies]
+testing = [
+  "black==22.10.0",
+  "cycler==0.12.1",
+  "IPython==7.31.1",
+  "isort==5.12.0",
+  "matplotlib==3.6.2",
+  "nb-clean==2.4.0",
+  "nbconvert==7.6.0",
+  "nbmetalog==0.2.6",
+  "outset==0.1.8",
+  "pytest==7.2.2",
+  "pytest-xdist==3.2.1",
+  "ruff==0.0.260",
+  "seaborn==0.12.1",
+  "teeplot==0.5.0",
+  "tqdm==4.64.1",
+]
+release = [
+  "bumpver==2022.1120",
+  "twine==1.14.0",
+  "wheel==0.33.6",
+  "pip==22.0.4",
+  "pip_tools==6.10.0",
+  "setuptools==65.6.3",
+]
+# docs = [
+#   "Sphinx==4.4.0",
+#   "sphinx_rtd_theme==1.0.0",
+# ]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.urls]
+homepage = "https://github.com/mmore500/cryptic-sequence-concept"
+# documentation = "https://hstrat.readthedocs.io"
+repository = "https://github.com/mmore500/cryptic-sequence-concept.git"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "tests.*", "test_knockem", "pylib.test", "pylib.test.*"]
+namespaces = false
+
+# adapted from https://tox.wiki/en/latest/example/package.html
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "cython>=0.29",
+  "setuptools >= 35.0.2",
+  "setuptools_scm >= 2.0.0, <3",
+]
+
 [tool.black]
 line_length = 79
 
