@@ -4,6 +4,8 @@ import os
 
 from .common import records as rec
 
+logging.setLevel(logging.INFO)
+
 
 def cleanup_genome(args: argparse.Namespace) -> None:
     genome_id = args.genome_id

@@ -1,5 +1,6 @@
 import functools
 import os
+import logging
 
 from pymongo import MongoClient
 
@@ -13,6 +14,7 @@ def get_db():
         raise ValueError(f"Environment variable {env_key} is not set.")
 
     uri = os.environ["KNOCKEM_RECORDS_URI"]
+    logging.info(f"Connecting to {uri}")
     return MongoClient(uri).knockem
 
 
