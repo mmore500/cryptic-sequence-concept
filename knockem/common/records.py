@@ -202,9 +202,9 @@ def has_competition_result(competitionId: str) -> bool:
 # cleanup =====================================================================
 def purge_submission(submissionId: str):
     for collection in get_db().list_collection_names():
-        collection.delete_many({"submissionId": submissionId})
+        get_db()[collection].delete_many({"submissionId": submissionId})
 
 
 def purge_testing():
     for collection in get_db().list_collection_names():
-        collection.delete_many({"knockemRunmode": "testing"})
+        get_db()[collection].delete_many({"knockemRunmode": "testing"})
