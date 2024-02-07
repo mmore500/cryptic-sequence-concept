@@ -4,7 +4,7 @@ import os
 
 from .common import records as rec
 
-logging.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 
 def cleanup_genome(args: argparse.Namespace) -> None:
