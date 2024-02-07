@@ -96,6 +96,12 @@ def iter_active_submissionIds() -> typing.List[str]:
             yield row["submissionId"]
 
 
+def has_submission(submissionId: str) -> bool:
+    table = get_submissions_table()
+    with get_db() as tx:
+        return bool(tx[table].count(submissionId=submissionId))
+
+
 # assays ======================================================================
 def activate_assay(assayId: str) -> None:
     table = get_assays_table()
