@@ -1,3 +1,4 @@
+import logging
 import multiprocessing
 import time
 
@@ -8,11 +9,14 @@ from .service import handlers
 
 
 def run_scheduler():
-    schedule.every(20).seconds.do(handlers.run_handlers)
+    schedule.every(10).seconds.do(handlers.run_handlers)
     while True:
-        # schedule.run_pending()
-        time.sleep(1)
+        logging.info("Scheduler loop.")
+        schedule.run_pending()
+        time.sleep(5)
 
+
+logging.basicConfig(level=logging.INFO)
 
 app = AsyncApp(__name__)
 
