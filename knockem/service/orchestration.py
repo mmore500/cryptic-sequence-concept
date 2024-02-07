@@ -1,11 +1,17 @@
+import datetime
 import functools
 import os
+import time
 import typing
 import warnings
 
 import dataset
 
 from .meta import with_common_columns
+
+
+def _get_time() -> int:
+    time.time_ns() // 1000000000
 
 
 @functools.lru_cache
@@ -45,7 +51,7 @@ def add_submission(
     hasAssayNulldist: bool,
     hasAssaySkeletonization: bool,
     maxCompetitionsActive: int,
-    maxCompetitionsFail: int,
+    maxCompetitionRetries: int,
     submissionId: str,
     userEmail: str,
 ) -> None:
@@ -59,7 +65,7 @@ def add_submission(
         hasAssayNulldist=hasAssayNulldist,
         hasAssaySkeletonization=hasAssaySkeletonization,
         maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionsFail=maxCompetitionsFail,
+        maxCompetitionRetries=maxCompetitionRetries,
         status="active",
         submissionId=submissionId,
         userEmail=userEmail,
@@ -69,23 +75,30 @@ def add_submission(
         tx[table].insert(row)
 
 
-def completeSubmission(submissionId: str) -> None:
+def complete_submission(submissionId: str) -> None:
     if depends_on_unresolved(dependedById=submissionId):
         warnings.warn(
             f"Submission {submissionId} has unresolved dependencies "
             "but is being completed.",
         )
     with get_db() as tx:
-        tx[get_submissions_table()].delete(id=submissionId)
+        tx[get_submissions_table()].delete(submissionId=submissionId)
         tx[get_assays_table()].delete(submissionId=submissionId)
         tx[get_competitions_table()].delete(submissionId=submissionId)
+
+
+def iter_active_submissionIds() -> typing.List[str]:
+    table = get_submissions_table()
+    with get_db() as tx:
+        for row in tx[table].find(status="active"):
+            yield row["submissionId"]
 
 
 # assays ======================================================================
 def activate_assay(assayId: str) -> None:
     table = get_assays_table()
     with get_db() as tx:
-        tx[table].update(dict(id=assayId, status="active"), ["id"])
+        tx[table].update(dict(assayId=assayId, status="active"), ["assayId"])
 
 
 def complete_assay(assayId: str) -> None:
@@ -97,11 +110,11 @@ def complete_assay(assayId: str) -> None:
     table = get_assays_table()
     with get_db() as tx:
         resolve_dependencies_on(dependsOnId=assayId)
-        tx[table].delete(id=assayId)
+        tx[table].delete(assayId=assayId)
 
 
 def enqueue_assay(
-    assayId: int,
+    assayId: str,
     assayType: str,
     competitionTimeoutSeconds: int,
     containerEnv: str,
@@ -109,7 +122,7 @@ def enqueue_assay(
     dependsOnIds: list[str],
     genomeId: str,
     maxCompetitionsActive: int,
-    maxCompetitionsFail: int,
+    maxCompetitionRetries: int,
     submissionId: str,
     userEmail: str,
 ) -> None:
@@ -121,7 +134,7 @@ def enqueue_assay(
         containerImage=containerImage,
         genomeId=genomeId,
         maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionsFail=maxCompetitionsFail,
+        maxCompetitionRetries=maxCompetitionRetries,
         submissionId=submissionId,
         status="pending",
         userEmail=userEmail,
@@ -133,11 +146,51 @@ def enqueue_assay(
             add_dependency(dependedById=row["id"], dependsOnId=dependsOnId)
 
 
+def get_assay_document(assayId: str) -> dict:
+    table = get_assays_table()
+    with get_db() as tx:
+        return tx[table].find_one(assayId=assayId)
+
+
+def iter_active_assayIds() -> typing.List[str]:
+    table = get_assays_table()
+    with get_db() as tx:
+        for row in tx[table].find(status="active"):
+            yield row["assayId"]
+
+
+def iter_pending_assayIds() -> typing.List[str]:
+    table = get_assays_table()
+    with get_db() as tx:
+        for row in tx[table].find(status="pending"):
+            yield row["assayId"]
+
+
 # competitions ================================================================
 def activate_competition(competitionId: str) -> None:
     table = get_competitions_table()
     with get_db() as tx:
-        tx[table].update(dict(id=competitionId, status="active"), ["id"])
+        tx[table].update(
+            dict(
+                activationTimestamp=_get_time(),
+                competitionId=competitionId,
+                status="active",
+            ),
+            ["competitionId"],
+        )
+
+
+def requeue_competition(competitionId: str, retry: int) -> None:
+    table = get_competitions_table()
+    with get_db() as tx:
+        tx[table].update(
+            dict(
+                competitionId=competitionId,
+                competitionRetryCount=retry,
+                status="pending",
+            ),
+            ["competitionId"],
+        )
 
 
 def enqueue_competition(
@@ -150,13 +203,15 @@ def enqueue_competition(
     genomeIdBeta: str,
     knockoutSites: str,
     maxCompetitionsActive: int,
-    maxCompetitionsFail: int,
+    maxCompetitionRetries: int,
     submissionId: str,
     userEmail: str,
 ) -> None:
     row = with_common_columns(
+        activationTimestamp=0,
         assayId=assayId,
         competitionId=competitionId,
+        competitionRetryCount=0,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,
         containerImage=containerImage,
@@ -164,7 +219,7 @@ def enqueue_competition(
         genomeIdBeta=genomeIdBeta,
         knockoutSites=knockoutSites,
         maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionsFail=maxCompetitionsFail,
+        maxCompetitionRetries=maxCompetitionRetries,
         status="pending",
         submissionId=submissionId,
         userEmail=userEmail,
@@ -177,14 +232,41 @@ def enqueue_competition(
 def complete_competition(competitionId: str) -> None:
     table = get_competitions_table()
     with get_db() as tx:
-        tx[table].update(dict(id=competitionId, status="completed"), ["id"])
+        tx[table].update(
+            dict(competitionId=competitionId, status="completed"),
+            ["competitionId"],
+        )
         resolve_dependencies_on(dependsOnId=competitionId)
 
 
 def fail_competition(competitionId: str) -> None:
     table = get_competitions_table()
     with get_db() as tx:
-        tx[table].update(dict(id=competitionId, status="failed"), ["id"])
+        tx[table].update(
+            dict(competitionId=competitionId, status="failed"),
+            ["competitionId"],
+        )
+    raise RuntimeError(f"Competition {competitionId} has failed.")
+
+
+def get_competition_document(competitionId: str) -> dict:
+    table = get_competitions_table()
+    with get_db() as tx:
+        return tx[table].find_one(competitionId=competitionId)
+
+
+def iter_pending_competitionIds() -> typing.List[str]:
+    table = get_competitions_table()
+    with get_db() as tx:
+        for row in tx[table].find(status="active"):
+            yield row["assayId"]
+
+
+def iter_pending_assayIds() -> typing.List[str]:
+    table = get_competitions_table()
+    with get_db() as tx:
+        for row in tx[table].find(status="pending"):
+            yield row["assayId"]
 
 
 # dependencies =================================================================

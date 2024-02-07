@@ -27,6 +27,6 @@ UniformSumDistribution==1.0.3
 connexion==3.0.5
 dataset==1.6.2
 pymongo==4.6.1
-
+schedule==1.2.1
 # https://github.com/sphinx-doc/sphinx/issues/10291
 Jinja2<3.1
