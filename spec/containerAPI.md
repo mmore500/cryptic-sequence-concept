@@ -43,6 +43,8 @@ singularity run {containerImage} \
 
 ## `knockem_compete_two`
 
+args: none
+
 env:
 - `KNOCKEM_ASSAY_ID` (str)
 - `KNOCKEM_COMPETITION_ID` (str)
