@@ -4,7 +4,12 @@ from connexion.exceptions import BadRequestProblem
 
 from ..orchestration import add_submission as add_submission_orchestration
 from ..orchestration import has_user, enqueue_assay
-from ...common.records import add_genome, add_assay
+from ...common.records import (
+    add_genome,
+    add_assay,
+    get_genome_document,
+    is_genome_ephemeral,
+)
 from ...common.records import add_submission as add_submission_record
 
 
@@ -35,9 +40,12 @@ def _submission_new(
     submissionId = str(uuid.uuid4())
     genomeId = add_genome(
         genomeContent=genomeContentAlpha,
+        isEphemeral=False,
         submissionId=submissionId,
         userEmail=userEmail,
     )
+    assert not is_genome_ephemeral(genomeId)
+    assert not get_genome_document(genomeId) is None
     submissionId = add_submission_record(
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,
