@@ -13,6 +13,7 @@ def _run_competition(document: dict) -> None:
         "KNOCKEM_COMPETITION_ATTEMPT_ID": str(uuid.uuid4()),
         "KNOCKEM_GENOME_ID_ALPHA": document["genomeIdAlpha"],
         "KNOCKEM_GENOME_ID_BETA": document["genomeIdBeta"],
+        "KNOCKEM_NUM_KNOCKOUT_SITES": len(document["knockoutSites"].split()),
         "KNOCKEM_RUNMODE": document["knockemRunmode"],
         "KNOCKEM_SUBMISSION_ID": document["submissionId"],
         "KNOCKEM_USER_EMAIL": document["userEmail"],

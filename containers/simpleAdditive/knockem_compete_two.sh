@@ -26,3 +26,5 @@ sleep 5
 
 # Report competition results
 python3 -m knockem.cli report-competition "${updatesElapsed}" "${numAlpha}" "${numBeta}"
+python3 -m knockem.cli cleanup-genome "$KNOCKEM_GENOME_ID_ALPHA"
+python3 -m knockem.cli cleanup-genome "$KNOCKEM_GENOME_ID_BETA"

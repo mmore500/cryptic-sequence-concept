@@ -172,7 +172,7 @@ def add_competition(
 def add_competition_result(
     assayId: str,
     competitionId: str,
-    knockoutSites: str,
+    numKnockoutSites: int,
     resultUpdatesElapsed: int,
     resultNumAlpha: int,
     resultNumBeta: int,
@@ -185,8 +185,7 @@ def add_competition_result(
         row = with_common_columns(
             assayId=assayId,
             competitionId=competitionId,
-            knockoutSites=knockoutSites,
-            numKnockoutSites=len(knockoutSites.split()),
+            numKnockoutSites=numKnockoutSites,
             resultUpdatesElapsed=resultUpdatesElapsed,
             resultNumAlpha=resultNumAlpha,
             resultNumBeta=resultNumBeta,
