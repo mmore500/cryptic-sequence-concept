@@ -35,6 +35,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - run: |
+          cd containers/simpleAdditive
+          rsync -rI "$(readlink -f knockem)" .
+          rsync -rI "$(readlink -f pyproject.toml)" .
       - name: Build and Push to GitHub Container Registry
         uses: docker/build-push-action@v1
         with:
