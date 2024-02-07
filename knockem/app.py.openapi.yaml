@@ -21,9 +21,10 @@ paths:
               required:
                 - containerEnv
                 - containerImage
-                - genomeContent
+                - competitionTimeoutSeconds
+                - genomeContentAlpha
                 - maxCompetitionsActive
-                - maxCompetitionsFail
+                - maxCompetitionRetries
                 - userEmail
               properties:
                 containerEnv:
@@ -31,26 +32,28 @@ paths:
                   additionalProperties:
                     type: string
                   example: { "ENV_VAR1": "value1", "ENV_VAR2": "value2" }
+                competitionTimeoutSeconds:
+                  type: integer
+                  format: int32
+                  example: 60
                 containerImage:
                   type: string
-                  example:
-                    - "yourorg/yourimage:tag"
-                    - "ghcr.io:yourorg/yourimage:tag"
+                  example: "ghcr.io/mmore500/cryptic-sequence-concept:simpleAdditive"
                   description: see `spec/containerAPI.md` for details
                 genomeContentAlpha:
                   type: string
                   example: |
-                    Search
-                    Nop-C
-                    Nop-D
-                    Push-Prev
-                    SetMemory
-                    Nop-A
+                    0
+                    1
+                    2
+                    0
+                    0
+                    0
                 maxCompetitionsActive:
                   type: integer
                   format: int32
-                  example: 5
-                maxCompetitionsFail:
+                  example: 2
+                maxCompetitionRetries:
                   type: integer
                   format: int32
                   example: 3

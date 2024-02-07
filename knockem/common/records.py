@@ -57,12 +57,11 @@ def add_submission(
     hasAssayNulldist: bool,
     hasAssaySkeletonization: bool,
     maxCompetitionsActive: int,
-    maxCompetitionsFail: int,
+    maxCompetitionRetries: int,
+    submissionId: str,
     userEmail: str,
 ) -> str:
     row = with_common_columns(
-        "submissionId",
-        "_id",
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,
         containerImage=containerImage,
@@ -72,10 +71,12 @@ def add_submission(
         hasAssayNulldist=hasAssayNulldist,
         hasAssaySkeletonization=hasAssaySkeletonization,
         maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionsFail=maxCompetitionsFail,
+        maxCompetitionRetries=maxCompetitionRetries,
         status="active",
+        submissionId=submissionId,
         userEmail=userEmail,
     )
+    row["_id"] = submissionId
     get_db().submissions.insert_one(row)
     return row["_id"]
 
@@ -89,7 +90,7 @@ def add_assay(
     dependsOnIds: list[str],
     genomeIdAlpha: str,
     maxCompetitionsActive: int,
-    maxCompetitionsFail: int,
+    maxCompetitionRetries: int,
     submissionId: str,
     userEmail: str,
 ) -> str:
@@ -103,7 +104,7 @@ def add_assay(
         dependsOnIds=dependsOnIds,
         genomeIdAlpha=genomeIdAlpha,
         maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionsFail=maxCompetitionsFail,
+        maxCompetitionRetries=maxCompetitionRetries,
         submissionId=submissionId,
         userEmail=userEmail,
     )
