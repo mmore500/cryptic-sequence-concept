@@ -21,7 +21,7 @@ def _run_competition(document: dict) -> None:
     knockem_env = [
         elem
         for key, value in knockem_env.items()
-        for elem in ["--env", f"{key}='{value}'"]
+        for elem in ["--env", f"{key}={value}"]
     ]
     command = (
         [
