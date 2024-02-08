@@ -1,6 +1,6 @@
 import functools
-import os
 import logging
+import os
 
 from pymongo import MongoClient
 

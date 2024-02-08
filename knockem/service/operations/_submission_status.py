@@ -4,14 +4,14 @@ from connexion.exceptions import BadRequestProblem
 
 from ...common.records import get_submission_assay_results
 from ..orchestration import (
-    get_num_dependencies,
     get_num_active_assays,
-    get_num_completed_assays,
-    get_num_failed_assays,
-    get_num_pending_assays,
     get_num_active_competitions,
+    get_num_completed_assays,
     get_num_completed_competitions,
+    get_num_dependencies,
+    get_num_failed_assays,
     get_num_failed_competitions,
+    get_num_pending_assays,
     get_num_pending_competitions,
     has_submission,
 )

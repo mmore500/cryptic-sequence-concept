@@ -2,15 +2,11 @@ import uuid
 
 from connexion.exceptions import BadRequestProblem
 
-from ..orchestration import add_submission as add_submission_orchestration
-from ..orchestration import has_user, enqueue_assay
-from ...common.records import (
-    add_genome,
-    add_assay,
-    get_genome_document,
-    is_genome_ephemeral,
-)
+from ...common.records import add_assay, add_genome
 from ...common.records import add_submission as add_submission_record
+from ...common.records import get_genome_document, is_genome_ephemeral
+from ..orchestration import add_submission as add_submission_orchestration
+from ..orchestration import enqueue_assay, has_user
 
 
 def submission_new(
