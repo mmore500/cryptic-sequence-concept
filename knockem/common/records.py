@@ -170,7 +170,7 @@ def add_competition(
         submissionId=submissionId,
         userEmail=userEmail,
     )
-    get_db().assays.insert_one(row)
+    get_db().competitions.insert_one(row)
     return row["_id"]
 
 
@@ -198,7 +198,7 @@ def add_competition_result(
             userEmail=userEmail,
             _id=competitionId,
         )
-        get_db().assayResults.insert_one(row)
+        get_db().competitionResults.insert_one(row)
         return True
 
 
