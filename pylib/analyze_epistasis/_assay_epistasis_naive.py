@@ -1,5 +1,6 @@
-import numpy as np
 import typing
+
+import numpy as np
 
 
 def assay_epistasis_naive(

@@ -2,14 +2,13 @@ import numpy as np
 import pytest
 
 from pylib.auxlib._jackknife_mark_recapture_estimate import (
-    jackknife_mark_recapture_estimate,
     _95CIk,
-    _Tk,
     _NJk,
     _NJk_v2,
     _seNjk,
+    _Tk,
+    jackknife_mark_recapture_estimate,
 )
-
 
 # adapted from
 # Burnham, Kenneth P., and W. Scott Overton.
