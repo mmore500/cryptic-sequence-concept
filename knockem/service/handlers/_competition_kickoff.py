@@ -3,7 +3,6 @@ import subprocess
 import uuid
 
 from .. import orchestration as orch
-from ...common import records as rec
 
 
 def _run_competition(document: dict) -> None:

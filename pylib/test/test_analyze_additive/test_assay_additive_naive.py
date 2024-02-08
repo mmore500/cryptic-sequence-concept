@@ -1,10 +1,7 @@
-from pylib.analyze_additive import (
-    assay_additive_naive,
-    pick_doses_extrema,
-)
+from pylib.analyze_additive import assay_additive_naive, pick_doses_extrema
 from pylib.modelsys_explicit import (
-    GenomeExplicit,
     CalcKnockoutEffectsAdditive,
+    GenomeExplicit,
     create_additive_array,
 )
 

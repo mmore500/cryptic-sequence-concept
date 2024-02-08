@@ -41,7 +41,7 @@ def _submission_new(
         userEmail=userEmail,
     )
     assert not is_genome_ephemeral(genomeId)
-    assert not get_genome_document(genomeId) is None
+    assert get_genome_document(genomeId) is not None
     submissionId = add_submission_record(
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,

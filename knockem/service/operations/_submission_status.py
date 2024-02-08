@@ -1,5 +1,3 @@
-import uuid
-
 from connexion.exceptions import BadRequestProblem
 
 from ...common.records import get_submission_assay_results

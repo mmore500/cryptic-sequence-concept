@@ -12,4 +12,6 @@ def assay_completion() -> int:
         orch.complete_assay(assayId)
         num_completed += 1
 
+    if num_completed > 0:
+        logging.info(f"Completed {num_completed} assays.")
     return num_completed
