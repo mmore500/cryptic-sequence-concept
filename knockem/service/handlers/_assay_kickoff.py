@@ -8,6 +8,7 @@ def assay_kickoff() -> int:
     num_launched = 0
     for assayId in orch.iter_pending_assayIds():
         if orch.depends_on_unresolved(assayId):
+            logging.info(f"Assay {assayId} depends on unresolved assays.")
             continue
 
         document = orch.get_assay_document(assayId)

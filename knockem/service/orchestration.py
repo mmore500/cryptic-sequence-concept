@@ -313,7 +313,7 @@ def add_dependency(
 def depends_on_unresolved(dependedById: str) -> bool:
     table = get_dependencies_table()
     with get_db() as tx:
-        return bool(tx[table].find(dependedById=dependedById))
+        return bool(tx[table].count(dependedById=dependedById))
 
 
 def resolve_dependencies_on(dependsOnId: str) -> None:
