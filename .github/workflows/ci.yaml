@@ -51,6 +51,27 @@ jobs:
           path: ./containers/simpleAdditive/
           add_git_labels: true
 
+  docker-simpleAdditiveSLURM-build:
+    name: Docker simpleAdditiveSLURM Image Build
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd containers/simpleAdditiveSLURM
+          rsync -rI "$(readlink -f knockem)" .
+          rsync -rI "$(readlink -f pyproject.toml)" .
+      - name: Build and Push to GitHub Container Registry
+        uses: docker/build-push-action@v1
+        with:
+          push: true
+          tags: "simpleAdditiveSLURM"
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          repository: mmore500/cryptic-sequence-concept
+          registry: ghcr.io
+          path: ./containers/simpleAdditiveSLURM/
+          add_git_labels: true
+
   tidy:
     runs-on: ubuntu-latest
     steps:
