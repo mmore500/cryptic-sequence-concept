@@ -2,12 +2,12 @@ import functools
 import json
 import logging
 import os
-import requests
 import typing
 import warnings
 
 from pymongo import MongoClient
 from pymongo.database import Database as MongoDatabase
+import requests
 
 from ..auxlib._is_slurm_job import is_slurm_job
 from .meta import with_common_columns

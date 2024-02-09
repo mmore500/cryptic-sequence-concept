@@ -1,9 +1,9 @@
+import argparse
 import logging
 import os
 import sys
 import uuid
 
-import argparse
 import paramiko
 
 

@@ -6,7 +6,6 @@ from ._fetch_genome import fetch_genome
 from ._forward_to_slurm import forward_to_slurm
 from ._report_competition import report_competition
 
-
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
