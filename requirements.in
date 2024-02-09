@@ -26,6 +26,7 @@ UniformSumDistribution==1.0.3
 # app
 connexion[uvicorn,swagger-ui]==3.0.5
 dataset==1.6.2
+paramiko==3.4.0
 pymongo==4.6.1
 schedule==1.2.1
 # https://github.com/sphinx-doc/sphinx/issues/10291

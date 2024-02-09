@@ -23,6 +23,7 @@ dependencies = [
     "pandas",
     "scipy",
     "UniformSumDistribution",
+    "paramiko",
     "pymongo",
     "schedule",
 ]
