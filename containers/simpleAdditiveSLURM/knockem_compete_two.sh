@@ -57,6 +57,9 @@ cp "\${JOBSCRIPT_PATH}" "\${HOME}/jobscript/id=\${SLURM_JOB_ID:-none}+stage=\${S
 # -----------------------------------------------------------------------------
 echo "do work..."
 # -----------------------------------------------------------------------------
+temp_dir="\$(mktemp -d)"
+pwd
+
 echo {{{knockem_run_command}}}
 {{{knockem_run_command}}}
 echo "date \$(date)"
