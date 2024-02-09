@@ -3,7 +3,7 @@
 if [ -z "${SLURM_JOB_ID}" ]; then
     echo "non-SLURM environment detected, forwarding to SLURM job & exiting"
 
-    python3 -m knockem.cli forward-to-slurm knockem-compete-two <<EOF
+    python3 -m knockem.cli forward-to-slurm knockem_compete_two <<EOF
 #!/bin/bash -login
 ########## Define Resources Needed with SBATCH Lines ##########
 #SBATCH --time=4:00:00               # Time limit hrs:min:sec

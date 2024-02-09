@@ -19,7 +19,7 @@ def forward_to_slurm(args: argparse.Namespace) -> None:
     env_words = [
         elem
         for key, value in env_dict.items()
-        for elem in ["--env", f"{key}={value}"]
+        for elem in ["--env", f"{key}='{value}'"]
     ]
     invocation_words = [
         "singularity",
