@@ -4,9 +4,9 @@ from pylib.analyze_epistasis import describe_skeletons, skeletonize_naive
 from pylib.modelsys_explicit import (
     CalcKnockoutEffectsAdditive,
     CalcKnockoutEffectsEpistasis,
+    GenomeExplicit,
     create_additive_array,
     create_epistasis_matrix_overlapping,
-    GenomeExplicit,
 )
 
 

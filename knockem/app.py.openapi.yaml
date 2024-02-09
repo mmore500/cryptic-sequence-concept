@@ -1,0 +1,146 @@
+openapi: "3.0.0"
+info:
+  title: Knockem
+  description: API for submitting tasks to Knockem.
+  version: "1.0"
+
+servers:
+  - url: '/api/v1'
+
+paths:
+  /submissions/:
+    post:
+      summary: Add a new submission
+      operationId: knockem.service.operations.submission_new
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - containerEnv
+                - containerImage
+                - competitionTimeoutSeconds
+                - genomeContentAlpha
+                - maxCompetitionsActive
+                - maxCompetitionRetries
+                - userEmail
+              properties:
+                containerEnv:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  example: { "ENV_VAR1": "value1", "ENV_VAR2": "value2" }
+                competitionTimeoutSeconds:
+                  type: integer
+                  format: int32
+                  example: 60
+                containerImage:
+                  type: string
+                  example: "ghcr.io/mmore500/cryptic-sequence-concept:simpleAdditive"
+                  description: see `spec/containerAPI.md` for details
+                genomeContentAlpha:
+                  type: string
+                  example: |
+                    0
+                    1
+                    2
+                    0
+                    0
+                    0
+                maxCompetitionsActive:
+                  type: integer
+                  format: int32
+                  example: 2
+                maxCompetitionRetries:
+                  type: integer
+                  format: int32
+                  example: 3
+                userEmail:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+      responses:
+        200:
+          description: Successfully created a new submission
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - submissionId
+                properties:
+                  submissionId:
+                    type: string
+                    example: "550e8400-e29b-41d4-a716-44665544000"
+        400:
+          description: Invalid input
+        500:
+          description: Internal server error
+  /submissions/{submissionId}:
+    get:
+      summary: Query submission status
+      operationId: knockem.service.operations.submission_status
+      responses:
+        200:
+          description: Successfully created a new submission
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - assayResults
+                  - numDependencies
+                  - numActiveAssays
+                  - numCompletedAssays
+                  - numFailedAssays
+                  - numPendingAssays
+                  - numActiveCompetitions
+                  - numCompletedCompetitions
+                  - numFailedCompetitions
+                  - numPendingCompetitions
+                properties:
+                  assayResults:
+                    type: array
+                  numDependencies:
+                    type: integer
+                    format: int32
+                  numActiveAssays:
+                    type: integer
+                    format: int32
+                  numCompletedAssays:
+                    type: integer
+                    format: int32
+                  numFailedAssays:
+                    type: integer
+                    format: int32
+                  numPendingAssays:
+                    type: integer
+                    format: int32
+                  numActiveCompetitions:
+                    type: integer
+                    format: int32
+                  numCompletedCompetitions:
+                    type: integer
+                    format: int32
+                  numFailedCompetitions:
+                    type: integer
+                    format: int32
+                  numPendingCompetitions:
+                    type: integer
+                    format: int32
+                  submissionId:
+                    type: string
+                    example: "550e8400-e29b-41d4-a716-44665544000"
+        400:
+          description: Invalid input
+        500:
+          description: Internal server error
+      parameters:
+        - name: submissionId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "550e8400-e29b-41d4-a716-44665544000"

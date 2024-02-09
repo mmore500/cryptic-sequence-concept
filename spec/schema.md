@@ -1,15 +1,17 @@
 ## noSQL database
 
-for job report-back and data storage
+for job report-back and record keeping
 
 ### `genomes`
-- `content`: string
 - `datetime`: string, ISO 8601
+- `genomeContent`: string
+- `genomeId`: string, RFC 4122 UUID
 - `isEphemeral`: boolean (should genome be deleted after download?)
     - should genome be deleted after use?
-- `id`: string, RFC 4122 UUID
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
 - `numSites`: int
-- `revisionKnockem`: string, short git commit hash
 - `userEmail`: string, email
 
 ### `submissions`
@@ -19,11 +21,13 @@ for job report-back and data storage
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
-- `genomeId`: string
+- `genomeIdAlpha`: string
 - `id`: string, RFC 4122 UUID
-- `maxActive`: int
-- `maxFail`: int
-- `revisionKnockem`: string, short git commit hash
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
+- `maxCompetitionsActive`: int
+- `maxCompetitionsFail`: int
 - `userEmail`: string, email
 
 ### `assays`
@@ -33,22 +37,27 @@ for job report-back and data storage
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID
-- `revisionKnockem`: string, short git commit hash
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
 ### `assayResults`
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID (corresponding to entry in `assays`)
-- `result`: JSON
-- `revisionKnockem`: string, short git commit hash
+- `knockemRevision`: string, short git commit hash
+- `knockemVersion`: string, semantic version
+- `assayResult`: JSON
 
 ### `competitions`
 - `assayId`: string, assay UUID
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
 - `knockoutSites`: list of int
-- `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
@@ -57,95 +66,83 @@ for job report-back and data storage
 - `competitionAttemptId`: string, RFC 4122 UUID
 - `datetime`: string, ISO 8601
 - `id`: string, RFC 4122 UUID (corresponding to entry in `competitions`)
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
 - `knockoutSites`: list of int
-- `numKnockoutSites`: list of int
+- `numKnockoutSites`: int
 - `result`:
     - `updatesElapsed`: numeric
     - `numAlpha`: int
     - `numBeta`: int
-- `revisionKnockem`: string, short git commit hash
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
-## redis database
+## sqlite database
 
 for server job orchestration
 
-### `activeSubmissions`
+### `submissions`
 - `assayIds`: list of strings, assay UUIDs
 - `competitionTimeoutSeconds`: int
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
-- `genomeId`: string
-- `id`: string, RFC 4122 UUID
-- `maxActive`: int
-- `maxFail`: int
-- `revisionKnockem`: string, short git commit hash
+- `genomeIdAlpha`: string
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
+- `maxCompetitionsActive`: int
+- `maxCompetitionsFail`: int
 - `submissionId`: string, submission UUID
+- `status`: string
 - `userEmail`: string, email
 
-### `pendingAssays`
+### `assays`
 - `assayId`: string, assay UUID
 - `competitionTimeoutSeconds`: int
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
 - `datetime`: string, ISO 8601
 - `dependsOnAssayIds`: list of strings, assay UUIDs
-- `genomeId`: string
-- `id`: string, RFC 4122 UUID
-- `maxActive`: int
-- `maxFail`: int
-- `revisionKnockem`: string, short git commit hash
+- `genomeIdAlpha`: string
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
+- `maxCompetitionsActive`: int
+- `maxCompetitionsFail`: int
 - `submissionId`: string, submission UUID
+- `status`: string
 - `userEmail`: string, email
 
-### `activeAssays`
-- `assayId`: string, assay UUID
-- `competitionTimeoutSeconds`: int
-- `containerEnv`: map of string to string
-- `containerImage`: string, Docker Hub image name or a registry name
-- `datetime`: string, ISO 8601
-- `dependsOnCompetitionIds`: list of strings, competition UUID
-- `genomeId`: string
-- `id`: string, RFC 4122 UUID
-- `maxActive`: int
-- `maxFail`: int
-- `revisionKnockem`: string, short git commit hash
-- `submissionId`: string, submission UUID
-- `userEmail`: string, email
-
-### `activeCompetitions`
+### `competitions`
 - `assayId`: string, assay UUID
 - `containerEnv`: map of string to string
 - `containerImage`: string, Docker Hub image name or a registry name
+- `competitionId`: string, uuid
 - `competitionTimeoutSeconds`: int
 - `datetime`: string, ISO 8601
 - `genomeIdAlpha`: string
 - `genomeIdBeta`: string
-- `id`: string, RFC 4122 UUID
-- `knockoutSites`: list of int
-- `maxActive`: int
-- `maxFail`: int
-- `revisionKnockem`: string, short git commit hash
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
+- `knockoutSites`: string, space separated int
+- `maxCompetitionsActive`: int
+- `maxCompetitionsFail`: int
+- `status`: string
 - `submissionId`: string, submission UUID
 - `userEmail`: string, email
 
-### `pendingCompetitions`
-- `assayId`: string, assay UUID
-- `containerEnv`: map of string to string
-- `containerImage`: string, Docker Hub image name or a registry name
-- `competitionTimeoutSeconds`: int
+### `dependencies`
+- `dependencyId`: string, UUID
+- `dependsOnId`: string, UUID
+- `dependedById`: string, UUID
 - `datetime`: string, ISO 8601
-- `genomeIdAlpha`: string
-- `genomeIdBeta`: string
-- `id`: string, RFC 4122 UUID
-- `knockoutSites`: list of int
-- `maxActive`: int
-- `maxFail`: int
-- `revisionKnockem`: string, short git commit hash
+- `knockemRevision`: string, short git commit hash
+- `knockemRunmode`: string, production or testing
+- `knockemVersion`: string, semantic version
 - `submissionId`: string, submission UUID
-- `userEmail`: string, email
 
 ### atomic counters
 

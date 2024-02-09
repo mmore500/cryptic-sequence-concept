@@ -2,18 +2,15 @@ import numpy as np
 import pandas as pd
 
 from pylib.analyze_agnostic import assay_agnostic_naive
-from pylib.analyze_epistasis import (
-    describe_skeletons,
-    skeletonize_naive,
-)
+from pylib.analyze_epistasis import describe_skeletons, skeletonize_naive
 from pylib.modelsys_explicit import (
     CalcKnockoutEffectsAdditive,
     CalcKnockoutEffectsEpistasis,
+    GenomeExplicit,
     create_additive_array,
     create_epistasis_matrix_disjoint,
     describe_additive_array,
     describe_epistasis_matrix,
-    GenomeExplicit,
 )
 
 

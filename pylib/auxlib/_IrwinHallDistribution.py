@@ -1,7 +1,7 @@
 import typing
 
-import numpy as np
 from UniformSumDistribution import UniformSumDistribution
+import numpy as np
 
 
 class IrwinHallDistribution:
