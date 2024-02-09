@@ -57,8 +57,8 @@ cp "${JOBSCRIPT_PATH}" "${HOME}/jobscript/id=${SLURM_JOB_ID:-none}+stage=${STAGE
 # -----------------------------------------------------------------------------
 echo "do work..."
 # -----------------------------------------------------------------------------
-echo {knockem_run_command}
-{knockem_run_command}
+echo {{{knockem_run_command}}}
+{{{knockem_run_command}}}
 echo "date \$(date)"
 echo "SECONDS \${SECONDS}"
 EOF

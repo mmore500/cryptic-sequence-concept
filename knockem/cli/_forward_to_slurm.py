@@ -32,7 +32,9 @@ def forward_to_slurm(args: argparse.Namespace) -> None:
     invocation = " ".join(invocation_words)
     logging.info(f"Invocation will be {invocation}")
 
-    slurm_script = sys.stdin.read().format(knockem_run_command=invocation)
+    slurm_script = sys.stdin.read().replace(
+        "{{{knockem_run_command}}}", invocation
+    )
 
     # SSH connection parameters
     ssh_username = os.environ["KNOCKEM_SLURM_SSH_USERNAME"]
