@@ -24,8 +24,8 @@ def forward_to_slurm(args: argparse.Namespace) -> None:
     ]
     invocation_words = [
         "singularity",
-        "run",
         *env_words,
+        "run",
         f"docker://{os.environ['KNOCKEM_CONTAINER_IMAGE']}",
         *args.command,
     ]
