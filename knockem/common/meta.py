@@ -22,11 +22,14 @@ def get_runmode() -> str:
 
 @functools.lru_cache
 def get_revision() -> str:
-    return (
-        subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
-        .decode("ascii")
-        .strip()
-    )
+    try:
+        return (
+            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
+            .decode("ascii")
+            .strip()
+        )
+    except subprocess.CalledProcessError:
+        return ""
 
 
 def get_version() -> str:
