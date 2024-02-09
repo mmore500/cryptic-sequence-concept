@@ -10,6 +10,8 @@ def _run_competition(document: dict) -> None:
         "KNOCKEM_ASSAY_ID": document["assayId"],
         "KNOCKEM_COMPETITION_ID": document["competitionId"],
         "KNOCKEM_COMPETITION_ATTEMPT_ID": str(uuid.uuid4()),
+        "KNOCKEM_CONTAINER_ENV": document["containerEnv"],
+        "KNOCKEM_CONTAINER_IMAGE": document["containerImage"],
         "KNOCKEM_GENOME_ID_ALPHA": document["genomeIdAlpha"],
         "KNOCKEM_GENOME_ID_BETA": document["genomeIdBeta"],
         "KNOCKEM_NUM_KNOCKOUT_SITES": len(document["knockoutSites"].split()),
@@ -31,6 +33,9 @@ def _run_competition(document: dict) -> None:
         ]
         + knockem_env
         + document["containerEnv"].split()
+        + document["containerEnv"]
+        .replace("--env ", "--env KNOCKEM_FWD__")
+        .split()
         + [
             f"docker://{document['containerImage']}",
             "knockem_compete_two",

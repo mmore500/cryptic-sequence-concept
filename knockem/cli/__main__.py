@@ -3,6 +3,7 @@ import logging
 
 from ._cleanup_genome import cleanup_genome
 from ._fetch_genome import fetch_genome
+from ._forward_to_slurm import forward_to_slurm
 from ._report_competition import report_competition
 
 
@@ -31,6 +32,21 @@ if __name__ == "__main__":
         "genome_id", type=str, help="The ID of the genome to fetch"
     )
     parser_fetch_genome.set_defaults(func=fetch_genome)
+
+    parser_forward_to_slurm = subparsers.add_parser(
+        "forward-to-slurm",
+        help="Forward an invocation to a slurm job, instantiating a slurm "
+        "script template provided via stdin with the template field "
+        "{knockem_run_command}",
+    )
+
+    parser_forward_to_slurm.add_argument(
+        "command",
+        nargs="*",
+        type=str,
+        help="The container invocation to forward.",
+    )
+    parser_forward_to_slurm.set_defaults(func=forward_to_slurm)
 
     # Subparser for the "report-competition" command
     parser_report_competition = subparsers.add_parser(
