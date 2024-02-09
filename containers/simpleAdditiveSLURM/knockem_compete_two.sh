@@ -32,27 +32,27 @@ echo "KNOCKEM_COMPETITION_ID=${KNOCKEM_COMPETITION_ID}"
 # -----------------------------------------------------------------------------
 echo "set up matthew's idiosyncratic SLURM creature comforts..."
 # -----------------------------------------------------------------------------
-ln -s "${HOME}/scratch" "/mnt/scratch/${USER}/" || :
-mkdir -p "${HOME}/joblog" || :
+ln -s "\${HOME}/scratch" "/mnt/scratch/\${USER}/" || :
+mkdir -p "\${HOME}/joblog" || :
 
-if [[ -z ${SLURM_JOB_ID:-} ]]; then
+if [[ -z \${SLURM_JOB_ID:-} ]]; then
   export JOBLOG_PATH="/dev/null"
 else
-  export JOBLOG_PATH="$(ls "${HOME}/joblog/"*"id=${SLURM_JOB_ID}+"*)"
+  export JOBLOG_PATH="\$(ls "\${HOME}/joblog/"*"id=\${SLURM_JOB_ID}+"*)"
 fi
-echo "JOBLOG_PATH ${JOBLOG_PATH}"
+echo "JOBLOG_PATH \${JOBLOG_PATH}"
 
-mkdir -p "${HOME}/joblatest" || :
-ln -srfT "${JOBLOG_PATH}" "${HOME}/joblatest/start" || :
+mkdir -p "\${HOME}/joblatest" || :
+ln -srfT "\${JOBLOG_PATH}" "\${HOME}/joblatest/start" || :
 
-export JOBSCRIPT_PATH="$0"
-echo "JOBSCRIPT_PATH ${JOBSCRIPT_PATH}"
-readlink -f "${JOBSCRIPT_PATH}"
-export JOBSCRIPT_PATH="$(readlink -f "${JOBSCRIPT_PATH}")"
-echo "JOBSCRIPT_PATH ${JOBSCRIPT_PATH}"
+export JOBSCRIPT_PATH="\$0"
+echo "JOBSCRIPT_PATH \${JOBSCRIPT_PATH}"
+readlink -f "\${JOBSCRIPT_PATH}"
+export JOBSCRIPT_PATH="\$(readlink -f "\${JOBSCRIPT_PATH}")"
+echo "JOBSCRIPT_PATH \${JOBSCRIPT_PATH}"
 
-mkdir -p "${HOME}/jobscript" || :
-cp "${JOBSCRIPT_PATH}" "${HOME}/jobscript/id=${SLURM_JOB_ID:-none}+stage=${STAGE}+ext=.slurm.sh" || :
+mkdir -p "\${HOME}/jobscript" || :
+cp "\${JOBSCRIPT_PATH}" "\${HOME}/jobscript/id=\${SLURM_JOB_ID:-none}+stage=\${STAGE}+ext=.slurm.sh" || :
 
 # -----------------------------------------------------------------------------
 echo "do work..."

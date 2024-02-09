@@ -72,8 +72,9 @@ def forward_to_slurm(args: argparse.Namespace) -> None:
 
             # Submit the SLURM job
             stdin, stdout, stderr = ssh.exec_command("sbatch slurm_job.sh")
-            job_output = stdout.read().decode("utf-8")
-            logging.info(f"SLURM job submitted. Output:\n{job_output}")
+            logging.info(f"SLURM job submitted.")
+            logging.info(f"stdout:\n{stdout.read().decode('utf-8')}")
+            logging.info(f"stderr:\n{stderr.read().decode('utf-8')}")
 
         except Exception as e:
             logging.error(f"SSH connection failed: {e}")
