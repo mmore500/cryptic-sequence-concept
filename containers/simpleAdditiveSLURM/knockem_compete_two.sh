@@ -7,7 +7,7 @@ if [ -z "${SLURM_JOB_ID}" ]; then
 #!/bin/bash -login
 ########## Define Resources Needed with SBATCH Lines ##########
 #SBATCH --time=4:00:00               # Time limit hrs:min:sec
-#SBATCH --job-name knockem ${KNOCKEM_COMPETITION_ID}
+#SBATCH --job-name knockem_${KNOCKEM_COMPETITION_ID}
 #SBATCH --account=devolab
 #SBATCH --output="/mnt/home/%u/joblog/id=%j+ext.txt"
 #SBATCH --mem=4G

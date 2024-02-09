@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import uuid
 
 import argparse
 import paramiko
@@ -63,7 +64,8 @@ def forward_to_slurm(args: argparse.Namespace) -> None:
             sftp = ssh.open_sftp()
 
             # Create a temporary file for the SLURM script
-            with sftp.file("slurm_job.sh", "w") as remote_file:
+            remote_path = f"/tmp/{uuid.uuid4()}.sh"
+            with sftp.file(remote_path, "w") as remote_file:
                 remote_file.write(slurm_script)
             logging.info("SLURM script uploaded successfully.")
 
@@ -71,7 +73,7 @@ def forward_to_slurm(args: argparse.Namespace) -> None:
             ssh.exec_command("chmod +x slurm_job.sh")
 
             # Submit the SLURM job
-            stdin, stdout, stderr = ssh.exec_command("sbatch slurm_job.sh")
+            stdin, stdout, stderr = ssh.exec_command(f"sbatch {remote_path}")
             logging.info(f"SLURM job submitted.")
             logging.info(f"stdout:\n{stdout.read().decode('utf-8')}")
             logging.info(f"stderr:\n{stderr.read().decode('utf-8')}")
