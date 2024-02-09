@@ -6,8 +6,6 @@ import uuid
 import argparse
 import paramiko
 
-from ..auxlib._is_slurm_job import is_slurm_job
-
 
 def forward_to_slurm(args: argparse.Namespace) -> None:
 
@@ -16,7 +14,7 @@ def forward_to_slurm(args: argparse.Namespace) -> None:
     env_dict = {
         k.replace("KNOCKEM_FWD__", ""): v
         for k, v in os.environ.items()
-        if k.startswith("KNOCKEM")
+        if k.startswith("KNOCKEM") and k != "KNOCKEM_CONTAINER_ENV"
     }
     env_words = [
         elem
