@@ -1,9 +1,9 @@
 from scipy import stats as scipy_stats
 
-from ._impl import add_competition
 from .. import orchestration as orch
 from ...analysis import score_competition
 from ...common import records as rec
+from ._impl import add_competition
 
 
 def dispatch_depended_assays(assayDocument: dict) -> int:

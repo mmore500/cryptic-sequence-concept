@@ -3,8 +3,8 @@ import uuid
 from connexion.exceptions import BadRequestProblem
 
 from ...common.records import (
-    add_submission,
     add_genome,
+    add_submission,
     get_genome_document,
     is_genome_ephemeral,
 )
