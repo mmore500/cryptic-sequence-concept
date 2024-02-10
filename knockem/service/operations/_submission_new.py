@@ -8,7 +8,7 @@ from ...common.records import (
     get_genome_document,
     is_genome_ephemeral,
 )
-from ..orchestration import enqueue_assay, enqueue_submission, has_user
+from ..orchestration import enqueue_submission, has_user
 
 
 def submission_new(

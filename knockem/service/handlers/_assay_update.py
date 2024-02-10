@@ -2,7 +2,6 @@ import logging
 
 from .. import assays
 from .. import orchestration as orch
-from ...common import records as rec
 
 
 def assay_update() -> int:
