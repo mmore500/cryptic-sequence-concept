@@ -8,6 +8,7 @@ from ...common.records import (
     get_genome_document,
     is_genome_ephemeral,
 )
+from ...container import pack_env_args
 from ..orchestration import enqueue_submission, has_user
 
 
@@ -29,11 +30,7 @@ def _submission_new(
     if not has_user(userEmail):
         raise BadRequestProblem(f"User {userEmail} is not registered.")
 
-    containerEnv = " ".join(
-        elem
-        for key, value in containerEnv.items()
-        for elem in ["--env", f"{key}='{value}'"]
-    )
+    containerEnv = pack_env_args(containerEnv)
 
     submissionId = str(uuid.uuid4())
     genomeId = add_genome(

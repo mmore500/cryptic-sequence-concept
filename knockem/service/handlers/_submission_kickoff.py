@@ -1,21 +1,15 @@
 import logging
-import subprocess
 
 from .. import orchestration as orch
 from ...common import records as rec
-
-
-def _warm_image_cache(containerImage: str) -> None:
-    command = ["singularity", "run", f"docker://{containerImage}", "true"]
-    logging.info(f"Warming cache with command: {' '.join(command)}")
-    subprocess.Popen(command).wait()
+from ...container import warm_image_cache
 
 
 def submission_kickoff() -> int:
     num_launched = 0
     for submissionId in orch.iter_pending_submissionIds():
         document = orch.get_submission_document(submissionId)
-        _warm_image_cache(document["containerImage"])
+        warm_image_cache(document["containerImage"])
         orch.activate_submission(submissionId)
         num_launched += 1
 

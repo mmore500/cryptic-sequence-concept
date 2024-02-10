@@ -2,6 +2,7 @@ import logging
 import subprocess
 import uuid
 
+from ...container import compete_two, get_env_from_document, pack_env_args
 from .. import orchestration as orch
 
 
@@ -54,7 +55,13 @@ def competition_kickoff() -> int:
         ):
             continue
 
-        _run_competition(document)
+        envArgs = " ".join(
+            [
+                pack_env_args(get_env_from_document(document)),
+                document["containerEnv"],
+            ]
+        )
+        compete_two(document["containerImage"], envArgs)
 
         orch.activate_competition(competitionId)
         num_launched += 1
