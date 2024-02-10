@@ -278,14 +278,14 @@ def get_competition_document(competitionId: str) -> dict:
         return tx[table].find_one(competitionId=competitionId)
 
 
-def iter_active_competitionIds() -> typing.List[str]:
+def iter_active_competitionIds() -> typing.Iterator[str]:
     table = get_competitions_table()
     with get_db() as tx:
         for row in tx[table].find(status="active"):
             yield row["competitionId"]
 
 
-def iter_pending_competitionIds() -> typing.List[str]:
+def iter_pending_competitionIds() -> typing.Iterator[str]:
     table = get_competitions_table()
     with get_db() as tx:
         for row in tx[table].find(status="pending"):
