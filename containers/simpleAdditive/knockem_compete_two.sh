@@ -22,8 +22,6 @@ echo "Updates elapsed: $updatesElapsed"
 echo "Num alpha: $numAlpha"
 echo "Num beta: $numBeta"
 
-sleep 5
-
 # Report competition results
 python3 -m knockem.cli report-competition "${updatesElapsed}" "${numAlpha}" "${numBeta}"
 python3 -m knockem.cli cleanup-genome "$KNOCKEM_GENOME_ID_ALPHA"
