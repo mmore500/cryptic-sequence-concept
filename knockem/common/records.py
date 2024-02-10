@@ -171,6 +171,7 @@ def add_submission(
 
 # assays ======================================================================
 def add_assay(
+    assayDesignation: dict,
     assayType: str,
     competitionTimeoutSeconds: int,
     containerEnv: str,
@@ -185,6 +186,7 @@ def add_assay(
     row = with_common_columns(
         "assayId",
         "_id",
+        assayDesignation=assayDesignation,
         assayType=assayType,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,
@@ -254,6 +256,7 @@ def get_submission_assay_results(submissionId: str) -> list[dict]:
 # competitios =================================================================
 def add_competition(
     assayId: str,
+    competitionDesignation: dict,
     genomeIdAlpha: str,
     genomeIdBeta: str,
     knockoutSites: str,
@@ -264,6 +267,7 @@ def add_competition(
         "competitionId",
         "_id",
         assayId=assayId,
+        competitionDesignation=competitionDesignation,
         genomeIdAlpha=genomeIdAlpha,
         genomeIdBeta=genomeIdBeta,
         knockoutSites=knockoutSites,
@@ -309,6 +313,20 @@ def add_competition_result(
         else:
             get_db().competitionResults.insert_one(row)
         return True
+
+
+def get_assay_competition_results(assayId: str) -> list[dict]:
+    if get_db() is None:
+        result = mongodb_data_api_request(
+            "find", "competitionresults", filter={"assayId": assayId}
+        )
+        return result.get("documents", [])
+    else:
+        return list(
+            get_db().assayResults.find(
+                {"assayId": assayId},
+            ),
+        )
 
 
 def has_competition_result(competitionId: str) -> bool:

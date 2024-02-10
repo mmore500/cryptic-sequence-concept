@@ -148,6 +148,7 @@ def complete_assay(assayId: str) -> None:
 
 
 def enqueue_assay(
+    assayDesignation: dict,
     assayId: str,
     assayType: str,
     competitionTimeoutSeconds: int,
@@ -161,6 +162,7 @@ def enqueue_assay(
     userEmail: str,
 ) -> None:
     row = with_common_columns(
+        assayDesignation=assayDesignation,
         assayId=assayId,
         assayType=assayType,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
@@ -240,6 +242,7 @@ def requeue_competition(competitionId: str, retry: int) -> None:
 
 def enqueue_competition(
     assayId: str,
+    competitionDesignation: str,
     competitionId: str,
     competitionTimeoutSeconds: int,
     containerEnv: str,
@@ -255,6 +258,7 @@ def enqueue_competition(
     row = with_common_columns(
         activationTimestamp=0,
         assayId=assayId,
+        competitionDesignation=competitionDesignation,
         competitionId=competitionId,
         competitionRetryCount=0,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
@@ -401,6 +405,12 @@ def get_num_pending_competitions(submissionId: str) -> int:
     table = get_competitions_table()
     with get_db() as tx:
         return tx[table].count(submissionId=submissionId, status="pending")
+
+
+def get_num_assay_competitions(assayId: str) -> int:
+    table = get_competitions_table()
+    with get_db() as tx:
+        return tx[table].count(assayId=assayId)
 
 
 # cleanup =====================================================================

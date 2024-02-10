@@ -157,11 +157,17 @@ maybe also in the future,
 
 ## Assay Types enum
 
-- `nulldist`
-    - wt-wt competition
-- `skeletonization`
-    - strip down to a minimal set of genes with WT fitness
 - `doseCalibration`
     - run a smear of dose level knockouts to calibrate titration dose selection
--`doseTitration`
+- `doseTitration`
     - run knockouts across a range of doses
+- `jackknifeKnockout`
+- `nulldist`
+    - wt-wt competition
+- `screenCritical`
+    - screen for critical sites
+- `skeletonization`
+    - strip down to a minimal set of genes with WT fitness
+- `skeletonMarkRecapture`
+    - sample skeletonizations to estimate functional sites
+- `skeletonSampleAndJackknife`
