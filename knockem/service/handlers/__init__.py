@@ -7,6 +7,7 @@ from ._competition_kickoff import competition_kickoff
 from ._competition_timeout import competition_timeout
 from ._submission_completion import submission_completion
 from ._submission_fail import submission_fail
+from ._submission_kickoff import submission_kickoff
 
 __all__ = [
     "assay_completion",
@@ -16,6 +17,7 @@ __all__ = [
     "competition_timeout",
     "submission_completion",
     "submission_fail",
+    "submission_kickoff",
 ]
 
 
@@ -30,5 +32,6 @@ def run_handlers() -> int:
             competition_timeout(),
             submission_completion(),
             submission_fail(),
+            submission_kickoff(),
         )
     )

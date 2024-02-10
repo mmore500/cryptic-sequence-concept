@@ -42,7 +42,20 @@ def get_users_table() -> str:
 
 
 # submissions =================================================================
-def add_submission(
+def activate_submission(submissionId: str) -> None:
+    table = get_submissions_table()
+    with get_db() as tx:
+        tx[table].update(
+            dict(
+                activationTimestamp=_get_time(),
+                submissionId=submissionId,
+                status="active",
+            ),
+            ["competitionId"],
+        )
+
+
+def enqueue_submission(
     competitionTimeoutSeconds: int,
     containerEnv: str,
     containerImage: str,
@@ -57,6 +70,7 @@ def add_submission(
     userEmail: str,
 ) -> None:
     row = with_common_columns(
+        activationTimestamp=0,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,
         containerImage=containerImage,
@@ -67,7 +81,7 @@ def add_submission(
         hasAssaySkeletonization=hasAssaySkeletonization,
         maxCompetitionsActive=maxCompetitionsActive,
         maxCompetitionRetries=maxCompetitionRetries,
-        status="active",
+        status="pending",
         submissionId=submissionId,
         userEmail=userEmail,
     )
@@ -88,10 +102,23 @@ def complete_submission(submissionId: str) -> None:
         tx[get_competitions_table()].delete(submissionId=submissionId)
 
 
+def get_submission_document(submissionId: str) -> dict:
+    table = get_submissions_table()
+    with get_db() as tx:
+        return tx[table].find_one(submissionId=submissionId)
+
+
 def iter_active_submissionIds() -> typing.List[str]:
     table = get_submissions_table()
     with get_db() as tx:
         for row in tx[table].find(status="active"):
+            yield row["submissionId"]
+
+
+def iter_pending_submissionIds() -> typing.List[str]:
+    table = get_submissions_table()
+    with get_db() as tx:
+        for row in tx[table].find(status="pending"):
             yield row["submissionId"]
 
 

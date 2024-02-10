@@ -2,11 +2,13 @@ import uuid
 
 from connexion.exceptions import BadRequestProblem
 
-from ...common.records import add_assay, add_genome
-from ...common.records import add_submission as add_submission_record
-from ...common.records import get_genome_document, is_genome_ephemeral
-from ..orchestration import add_submission as add_submission_orchestration
-from ..orchestration import enqueue_assay, has_user
+from ...common.records import (
+    add_submission,
+    add_genome,
+    get_genome_document,
+    is_genome_ephemeral,
+)
+from ..orchestration import enqueue_assay, enqueue_submission, has_user
 
 
 def submission_new(
@@ -42,7 +44,7 @@ def _submission_new(
     )
     assert not is_genome_ephemeral(genomeId)
     assert get_genome_document(genomeId) is not None
-    submissionId = add_submission_record(
+    submissionId = add_submission(
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,
         containerImage=containerImage,
@@ -56,7 +58,7 @@ def _submission_new(
         submissionId=submissionId,
         userEmail=userEmail,
     )
-    add_submission_orchestration(
+    enqueue_submission(
         containerEnv=containerEnv,
         containerImage=containerImage,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
@@ -64,32 +66,6 @@ def _submission_new(
         hasAssayDoseTitration=False,
         hasAssayNulldist=True,
         hasAssaySkeletonization=False,
-        genomeIdAlpha=genomeId,
-        maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionRetries=maxCompetitionRetries,
-        submissionId=submissionId,
-        userEmail=userEmail,
-    )
-
-    assayId = add_assay(
-        assayType="nulldist",
-        competitionTimeoutSeconds=competitionTimeoutSeconds,
-        containerEnv=containerEnv,
-        containerImage=containerImage,
-        dependsOnIds=[],
-        genomeIdAlpha=genomeId,
-        maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionRetries=maxCompetitionRetries,
-        submissionId=submissionId,
-        userEmail=userEmail,
-    )
-    enqueue_assay(
-        assayId=assayId,
-        assayType="nulldist",
-        competitionTimeoutSeconds=competitionTimeoutSeconds,
-        containerEnv=containerEnv,
-        containerImage=containerImage,
-        dependsOnIds=[],
         genomeIdAlpha=genomeId,
         maxCompetitionsActive=maxCompetitionsActive,
         maxCompetitionRetries=maxCompetitionRetries,
