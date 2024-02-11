@@ -20,6 +20,12 @@ singularity run {containerImage} \
     < {genomeContent} > output.genome
 ```
 
+responsibilities: (**end user implements**)
+- read genome content from stdin
+- take integer site id's as script args (i.e., bash `$@`)
+- print genome content with knockouts at site id's applied
+
+
 ## `knockem_count_sites`
 
 args: none
@@ -40,6 +46,10 @@ singularity run {containerImage} \
     --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ...
     < {genomeContent} > output.count
 ```
+
+responsibilities: (**end user implements**)
+- read genome content from stdin
+- print integer count of sites in genome
 
 ## `knockem_compete_two`
 
@@ -74,10 +84,10 @@ singularity run {containerImage} \
 ```
 
 responsibilities:
-- get genomes from database
+- get genomes from database (**end user calls knockem.cli from within container**)
     - invoke `python3 -m knockem.cli fetch-genome "{genomeIdAlpha}"` and `python3 -m knockem.cli fetch-genome "{genomeIdBeta}"`
-- run competition
-- upload competition results to database to `competitionAttemptResults`
+- run competition (**end user implements entirely**)
+- upload competition results to database to `competitionAttemptResults` (**end user calls knockem.cli from within container**)
     - invoke `knockem.cli report-competition "{updatesElapsed}" "{numAlpha}" "{numBeta}"`
     - will only upload competition result if it is not present
     - on success, deletes ephemeral genomes from database
