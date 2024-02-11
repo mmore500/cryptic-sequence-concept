@@ -16,6 +16,10 @@ def email_submission_status(
         logging.warning("No SendGrid API key found, skipping email.")
         return
 
+    if "@example.com" in userEmail:
+        logging.warning("Skipping email to example.com address")
+        return
+
     nl = "\n"  # no slashes in fstring
     message = Mail(
         from_email=get_daemon_email(),
