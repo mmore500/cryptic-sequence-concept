@@ -458,6 +458,17 @@ def purge_testing() -> None:
             tx[table].delete(knockemRunmode="testing")
 
 
+def purge_work() -> None:
+    with get_db() as tx:
+        for table in [
+            get_assays_table(),
+            get_competitions_table(),
+            get_dependencies_table(),
+            get_submissions_table(),
+        ]:
+            tx[table].delete()
+
+
 # api tokens ==================================================================
 def add_api_token(userEmail: str) -> str:
     row = with_common_columns("apiToken", userEmail=userEmail)
