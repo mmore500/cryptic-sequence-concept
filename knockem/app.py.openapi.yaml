@@ -78,6 +78,8 @@ paths:
           description: Invalid input
         500:
           description: Internal server error
+      security:
+        - api_key: []
   /submissions/{submissionId}:
     get:
       summary: Query submission status
@@ -144,3 +146,12 @@ paths:
           schema:
             type: string
             example: "550e8400-e29b-41d4-a716-44665544000"
+      security:
+        - api_key: []
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-Auth
+      in: header
+      x-apikeyInfoFunc: knockem.app.apikey_auth

@@ -5,9 +5,10 @@ import sys
 import time
 
 from connexion import AsyncApp
+from connexion.exceptions import OAuthProblem
 import schedule
 
-from .service import handlers
+from .service import handlers, orchestration
 
 _interrupted = 0
 
@@ -39,6 +40,13 @@ def run_scheduler():
 
     logging.info("Work completed. Shutting down.")
     sys.exit(0)
+
+
+def apikey_auth(token, required_scopes) -> dict:
+    if not orchestration.has_api_token(token):
+        raise OAuthProblem("Invalid token")
+
+    return {}
 
 
 logging.basicConfig(level=logging.INFO)

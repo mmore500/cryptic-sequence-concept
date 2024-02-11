@@ -9,7 +9,7 @@ from ...common.records import (
     is_genome_ephemeral,
 )
 from ...container import pack_env_args
-from ..orchestration import enqueue_submission, has_user
+from ..orchestration import enqueue_submission
 
 
 def submission_new(
@@ -27,8 +27,6 @@ def _submission_new(
     maxCompetitionRetries: int,
     userEmail: str,
 ) -> dict:
-    if not has_user(userEmail):
-        raise BadRequestProblem(f"User {userEmail} is not registered.")
 
     packedContainerEnv = pack_env_args(containerEnv)
 

@@ -37,7 +37,7 @@ def get_submissions_table() -> str:
     return "submissions"
 
 
-def get_users_table() -> str:
+def get_api_tokens_table() -> str:
     return "users"
 
 
@@ -458,16 +458,16 @@ def purge_testing() -> None:
             tx[table].delete(knockemRunmode="testing")
 
 
-# users =======================================================================
-def add_user(userEmail: str) -> str:
-    row = with_common_columns("userId", userEmail=userEmail)
-    table = get_users_table()
+# api tokens ==================================================================
+def add_api_token(userEmail: str) -> str:
+    row = with_common_columns("apiToken", userEmail=userEmail)
+    table = get_api_tokens_table()
     with get_db() as tx:
         tx[table].insert(row)
-    return row["userId"]
+    return row["apiToken"]
 
 
-def has_user(userEmail: str) -> bool:
-    table = get_users_table()
+def has_api_token(apiToken: str) -> bool:
+    table = get_api_tokens_table()
     with get_db() as tx:
-        return bool(tx[table].count(userEmail=userEmail))
+        return bool(tx[table].count(apiToken=apiToken))
