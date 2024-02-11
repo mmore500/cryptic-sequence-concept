@@ -1,3 +1,4 @@
+import threading
 import uuid
 
 from ...common.records import (
@@ -30,48 +31,55 @@ def _submission_new(
     packedContainerEnv = pack_env_args(containerEnv)
 
     submissionId = str(uuid.uuid4())
-    genomeId = add_genome(
-        containerEnv=packedContainerEnv,
-        containerImage=containerImage,
-        genomeContent=genomeContentAlpha,
-        isEphemeral=False,
-        submissionId=submissionId,
-        userEmail=userEmail,
-    )
-    assert not is_genome_ephemeral(genomeId)
-    assert get_genome_document(genomeId) is not None
-    submissionId = add_submission(
-        competitionTimeoutSeconds=competitionTimeoutSeconds,
-        containerEnv=containerEnv,
-        containerImage=containerImage,
-        hasAssayDoseCalibration=False,
-        hasAssayDoseTitration=False,
-        hasAssayNulldist=False,
-        hasAssayScreenCritical=True,
-        hasAssaySkeletonization=False,
-        genomeIdAlpha=genomeId,
-        maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionRetries=maxCompetitionRetries,
-        submissionId=submissionId,
-        userEmail=userEmail,
-    )
-    enqueue_submission(
-        containerEnv=packedContainerEnv,
-        containerImage=containerImage,
-        competitionTimeoutSeconds=competitionTimeoutSeconds,
-        hasAssayDoseCalibration=False,
-        hasAssayDoseTitration=False,
-        hasAssayNulldist=False,
-        hasAssayScreenCritical=True,
-        hasAssaySkeletonization=False,
-        genomeIdAlpha=genomeId,
-        maxCompetitionsActive=maxCompetitionsActive,
-        maxCompetitionRetries=maxCompetitionRetries,
-        submissionId=submissionId,
-        userEmail=userEmail,
-    )
-    email_submission_status(
-        submissionId, userEmail, "pending", genomeContentAlpha
-    )
+
+    def do_submission_new():
+        genomeId = add_genome(
+            containerEnv=packedContainerEnv,
+            containerImage=containerImage,
+            genomeContent=genomeContentAlpha,
+            isEphemeral=False,
+            submissionId=submissionId,
+            userEmail=userEmail,
+        )
+        assert not is_genome_ephemeral(genomeId)
+        assert get_genome_document(genomeId) is not None
+        add_submission(
+            competitionTimeoutSeconds=competitionTimeoutSeconds,
+            containerEnv=containerEnv,
+            containerImage=containerImage,
+            hasAssayDoseCalibration=False,
+            hasAssayDoseTitration=False,
+            hasAssayNulldist=False,
+            hasAssayScreenCritical=True,
+            hasAssaySkeletonization=False,
+            genomeIdAlpha=genomeId,
+            maxCompetitionsActive=maxCompetitionsActive,
+            maxCompetitionRetries=maxCompetitionRetries,
+            submissionId=submissionId,
+            userEmail=userEmail,
+        )
+        enqueue_submission(
+            containerEnv=packedContainerEnv,
+            containerImage=containerImage,
+            competitionTimeoutSeconds=competitionTimeoutSeconds,
+            hasAssayDoseCalibration=False,
+            hasAssayDoseTitration=False,
+            hasAssayNulldist=False,
+            hasAssayScreenCritical=True,
+            hasAssaySkeletonization=False,
+            genomeIdAlpha=genomeId,
+            maxCompetitionsActive=maxCompetitionsActive,
+            maxCompetitionRetries=maxCompetitionRetries,
+            submissionId=submissionId,
+            userEmail=userEmail,
+        )
+        email_submission_status(
+            submissionId, userEmail, "pending", genomeContentAlpha
+        )
+
+    # this operation might require a SIF build, so put in a background thread
+    # so that the API request can return
+    background_thread = threading.Thread(target=do_submission_new)
+    background_thread.start()
 
     return {"submissionId": submissionId}
