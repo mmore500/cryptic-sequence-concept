@@ -332,7 +332,7 @@ def get_assay_competition_results(assayId: str) -> list[dict]:
         return result.get("documents", [])
     else:
         return list(
-            get_db().assayResults.find(
+            get_db().competitionResults.find(
                 {"assayId": assayId},
             ),
         )
