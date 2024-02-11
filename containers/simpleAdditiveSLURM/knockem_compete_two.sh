@@ -1,8 +1,15 @@
 #!/bin/bash
 
+# =============================================================================
+# =============================================================================
+# if running outside SLURM, submit container invocation as a SLURM job
+# then exit early
+# =============================================================================
+# =============================================================================
 if [ -z "${SLURM_JOB_ID}" ]; then
     echo "non-SLURM environment detected, forwarding to SLURM job & exiting"
 
+    # SLURM script template can be customized by end user
     python3 -m knockem.cli forward-to-slurm knockem_compete_two <<EOF
 #!/bin/bash -login
 ########## Define Resources Needed with SBATCH Lines ##########
@@ -69,6 +76,12 @@ EOF
 else
     echo "SLURM environment detected, proceeding..."
 fi
+
+# =============================================================================
+# =============================================================================
+# begin actual work, which will run as a SLURM job
+# =============================================================================
+# =============================================================================
 
 # Fetch genomes
 genome_alpha=$(python3 -m knockem.cli fetch-genome "$KNOCKEM_GENOME_ID_ALPHA")
