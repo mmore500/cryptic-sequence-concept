@@ -8,5 +8,5 @@ def get_url_submission_get(
     return (
         f"{get_url_host()}"
         f"{get_url_base_path()}"
-        f"/submissions/{submissionId}?X-API-KEY={apiKey}"
+        f"/submissions/{submissionId}?X-Auth={apiKey}"
     )
