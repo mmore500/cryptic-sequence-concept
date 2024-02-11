@@ -358,6 +358,8 @@ python-dateutil==2.8.2
     #   pandas
 python-dotenv==1.0.1
     # via uvicorn
+python-http-client==3.3.7
+    # via sendgrid
 python-multipart==0.0.7
     # via connexion
 python-slugify==8.0.1
@@ -395,6 +397,8 @@ seaborn==0.12.1
     #   -r requirements.in
     #   hstrat
     #   outset
+sendgrid==6.11.0
+    # via -r requirements.in
 six==1.16.0
     # via
     #   anytree
@@ -416,6 +420,8 @@ sqlalchemy==1.4.51
     # via
     #   alembic
     #   dataset
+starkbank-ecdsa==2.2.0
+    # via sendgrid
 starlette==0.32.0.post1
     # via connexion
 swagger-ui-bundle==1.1.0
