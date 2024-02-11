@@ -51,6 +51,7 @@ def submission_kickoff() -> int:
         if document["hasAssayScreenCritical"]:
             _do_add_assay("screenCritical", document)
 
+        orch.activate_submission(submissionId)
     if num_launched > 0:
         logging.info(f"Launched {num_launched} submissions.")
     return num_launched
