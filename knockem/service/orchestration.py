@@ -51,7 +51,7 @@ def activate_submission(submissionId: str) -> None:
                 submissionId=submissionId,
                 status="active",
             ),
-            ["competitionId"],
+            ["submissionId"],
         )
 
 
