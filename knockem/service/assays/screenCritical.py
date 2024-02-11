@@ -1,8 +1,8 @@
 import logging
 
+from .. import orchestration as orch
 from ...analysis import score_competition
 from ...common import records as rec
-from .. import orchestration as orch
 from ._impl import add_competition, make_knockout_genome_id
 
 

@@ -2,8 +2,8 @@ import logging
 import subprocess
 import uuid
 
-from ...container import compete_two, get_env_from_document, pack_env_args
 from .. import orchestration as orch
+from ...container import compete_two, get_env_from_document, pack_env_args
 
 
 def _run_competition(document: dict) -> None:
