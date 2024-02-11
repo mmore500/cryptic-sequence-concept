@@ -88,6 +88,6 @@ responsibilities:
     - invoke `python3 -m knockem.cli fetch-genome "{genomeIdAlpha}"` and `python3 -m knockem.cli fetch-genome "{genomeIdBeta}"`
 - run competition (**end user implements entirely**)
 - upload competition results to database to `competitionAttemptResults` (**end user calls knockem.cli from within container**)
-    - invoke `knockem.cli report-competition "{updatesElapsed}" "{numAlpha}" "{numBeta}"`
+    - invoke `python3 -m knockem.cli report-competition "{updatesElapsed}" "{numAlpha}" "{numBeta}"`
     - will only upload competition result if it is not present
     - on success, deletes ephemeral genomes from database
