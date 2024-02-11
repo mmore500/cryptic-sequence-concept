@@ -3,7 +3,7 @@ import logging
 from .. import orchestration as orch
 from ...common import records as rec
 from ...container import warm_image_cache
-from ..admin import email_submission_status
+from ..admin import email_submission_status, get_url_submission_get
 
 
 def _do_add_assay(assayType: str, submissionDocument: dict) -> None:
@@ -53,7 +53,10 @@ def submission_kickoff() -> int:
             _do_add_assay("screenCritical", document)
 
         email_submission_status(
-            submissionId, document["userEmail"], "active", "None"
+            submissionId,
+            document["userEmail"],
+            "active",
+            get_url_submission_get(submissionId),
         )
 
         orch.activate_submission(submissionId)

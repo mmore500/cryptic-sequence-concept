@@ -153,5 +153,5 @@ components:
     api_key:
       type: apiKey
       name: X-Auth
-      in: header
+      in: query
       x-apikeyInfoFunc: knockem.app.apikey_auth
