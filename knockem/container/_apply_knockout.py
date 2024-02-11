@@ -2,17 +2,19 @@ import logging
 import subprocess
 
 
-def count_sites(
+def apply_knockout(
     genomeContent: str,
+    knockoutSites: str,
     containerEnv: str,
     containerImage: str,
-) -> int:
+) -> str:
     command = [
         "singularity",
         "run",
         *containerEnv.split(),
         f"docker://{containerImage}",
-        "knockem_count_sites",
+        "knockem_apply_knockout",
+        *knockoutSites.split(),
     ]
     logging.info(f"Running count_sites with command: {' '.join(command)}")
 
@@ -21,8 +23,4 @@ def count_sites(
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
     ).communicate(input=genomeContent.encode())
-    try:
-        return int(out)
-    except ValueError as e:
-        logging.error(f"count_sites failed with result {out}: {err}")
-        raise e
+    return out

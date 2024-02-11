@@ -35,16 +35,17 @@ def finalize_result(assayDocument: dict) -> dict:
     competition_scores = [
         m
         * score_competition(
-            resultNumAlpha=resultNumAlpha,
-            resultNumBeta=resultNumBeta,
-            resultUpdatesElapsed=resultUpdatesElapsed,
+            resultNumAlpha=res["resultNumAlpha"],
+            resultNumBeta=res["resultNumBeta"],
+            resultUpdatesElapsed=res["resultUpdatesElapsed"],
         )
-        for resultNumAlpha, resultNumBeta, resultUpdatesElapsed in competition_results
+        for res in competition_results
         for m in [1, 0, -1.0]
     ]
     result = {
         "sampledScoreQuantiles": {
-            p: scipy_stats.scoreatpercentile(competition_scores, p)
+            # keys must be strings
+            str(p): scipy_stats.scoreatpercentile(competition_scores, p)
             for p in range(0, 101)
         },
         "sampledScores": competition_scores,

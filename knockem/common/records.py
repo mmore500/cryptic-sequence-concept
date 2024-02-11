@@ -148,6 +148,7 @@ def add_submission(
     hasAssayDoseCalibration: bool,
     hasAssayDoseTitration: bool,
     hasAssayNulldist: bool,
+    hasAssayScreenCritical: bool,
     hasAssaySkeletonization: bool,
     maxCompetitionsActive: int,
     maxCompetitionRetries: int,
@@ -162,6 +163,7 @@ def add_submission(
         hasAssayDoseCalibration=hasAssayDoseCalibration,
         hasAssayDoseTitration=hasAssayDoseTitration,
         hasAssayNulldist=hasAssayNulldist,
+        hasAssayScreenCritical=hasAssayScreenCritical,
         hasAssaySkeletonization=hasAssaySkeletonization,
         maxCompetitionsActive=maxCompetitionsActive,
         maxCompetitionRetries=maxCompetitionRetries,
@@ -248,6 +250,26 @@ def has_assay_result(assayId: str) -> bool:
         )
 
 
+def does_submission_have_assay_result_of_type(
+    submissionId: str,
+    assayType: str,
+) -> bool:
+    if get_db() is None:
+        result = mongodb_data_api_request(
+            "findOne",
+            "assayResults",
+            filter={"assayType": assayType, "submissionId": submissionId},
+        )
+        return result.get("document", None) is not None
+    else:
+        return bool(
+            get_db().assayResults.count_documents(
+                {"assayType": assayType, "submissionId": submissionId},
+                limit=1,
+            ),
+        )
+
+
 def get_submission_assay_results(submissionId: str) -> list[dict]:
     if get_db() is None:
         result = mongodb_data_api_request(
@@ -258,6 +280,24 @@ def get_submission_assay_results(submissionId: str) -> list[dict]:
         return list(
             get_db().assayResults.find(
                 {"submissionId": submissionId},
+            ),
+        )
+
+
+def get_submission_assay_results_of_type(
+    submissionId: str, assayType: str
+) -> list[dict]:
+    if get_db() is None:
+        result = mongodb_data_api_request(
+            "find",
+            "assayResults",
+            filter={"submissionId": submissionId, "assayType": assayType},
+        )
+        return result.get("documents", [])
+    else:
+        return list(
+            get_db().assayResults.find(
+                {"submissionId": submissionId, "assayType": assayType},
             ),
         )
 
@@ -322,6 +362,16 @@ def add_competition_result(
         else:
             get_db().competitionResults.insert_one(row)
         return True
+
+
+def get_competition_document(competitionId: str):
+    if get_db() is None:
+        result = mongodb_data_api_request(
+            "findOne", "competitions", filter={"competitionId": competitionId}
+        )
+        return result.get("document")
+    else:
+        return get_db().competitions.find_one({"competitionId": competitionId})
 
 
 def get_assay_competition_results(assayId: str) -> list[dict]:

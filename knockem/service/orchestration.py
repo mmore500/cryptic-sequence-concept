@@ -63,6 +63,7 @@ def enqueue_submission(
     hasAssayDoseCalibration: bool,
     hasAssayDoseTitration: bool,
     hasAssayNulldist: bool,
+    hasAssayScreenCritical: bool,
     hasAssaySkeletonization: bool,
     maxCompetitionsActive: int,
     maxCompetitionRetries: int,
@@ -78,6 +79,7 @@ def enqueue_submission(
         hasAssayDoseCalibration=hasAssayDoseCalibration,
         hasAssayDoseTitration=hasAssayDoseTitration,
         hasAssayNulldist=hasAssayNulldist,
+        hasAssayScreenCritical=hasAssayScreenCritical,
         hasAssaySkeletonization=hasAssaySkeletonization,
         maxCompetitionsActive=maxCompetitionsActive,
         maxCompetitionRetries=maxCompetitionRetries,
@@ -154,6 +156,7 @@ def enqueue_assay(
     competitionTimeoutSeconds: int,
     containerEnv: str,
     containerImage: str,
+    dependedByIds: list[str],
     dependsOnIds: list[str],
     genomeIdAlpha: str,
     maxCompetitionsActive: int,
@@ -191,6 +194,13 @@ def enqueue_assay(
                 submissionId=submissionId,
                 userEmail=userEmail,
             )
+        for dependedById in dependedByIds:
+            add_dependency(
+                dependedById=dependedById,
+                dependsOnId=row["assayId"],
+                submissionId=submissionId,
+                userEmail=userEmail,
+            )
 
 
 def get_assay_document(assayId: str) -> dict:
@@ -210,6 +220,17 @@ def iter_pending_assayIds() -> typing.Iterator[str]:
     table = get_assays_table()
     with get_db() as tx:
         for row in tx[table].find(status="pending"):
+            yield row["assayId"]
+
+
+def iter_submission_assayIds_of_type(
+    submissionId: str, assayType: str
+) -> typing.Iterator[str]:
+    table = get_assays_table()
+    with get_db() as tx:
+        for row in tx[table].find(
+            submissionId=submissionId, assayType=assayType
+        ):
             yield row["assayId"]
 
 
@@ -309,6 +330,10 @@ def get_competition_document(competitionId: str) -> dict:
         return tx[table].find_one(competitionId=competitionId)
 
 
+def is_competition_completed(competitionId: str) -> bool:
+    return get_competition_document["status"] == "completed"
+
+
 def iter_active_competitionIds() -> typing.Iterator[str]:
     table = get_competitions_table()
     with get_db() as tx:
@@ -320,6 +345,13 @@ def iter_pending_competitionIds() -> typing.Iterator[str]:
     table = get_competitions_table()
     with get_db() as tx:
         for row in tx[table].find(status="pending"):
+            yield row["competitionId"]
+
+
+def iter_assay_competitionIds(assayId: str) -> typing.Iterator[str]:
+    table = get_competitions_table()
+    with get_db() as tx:
+        for row in tx[table].find(assayId=assayId):
             yield row["competitionId"]
 
 
