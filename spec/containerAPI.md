@@ -14,9 +14,10 @@ env:
 
 invocation:
 ```
-singularity run {containerImage} \
+singularity run \
+    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ... \
+    {containerImage} \
     knockem__apply_knockout {site1} {site2} ... \
-    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ...
     < {genomeContent} > output.genome
 ```
 
@@ -41,9 +42,10 @@ env:
 
 invocation:
 ```
-singularity run {containerImage} \
+singularity run \
+    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ... \
+    {containerImage} \
     knockem_count_sites \
-    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ...
     < {genomeContent} > output.count
 ```
 
@@ -69,8 +71,7 @@ env:
 
 invocation:
 ```
-singularity run {containerImage} \
-    knockem_compete_two \
+singularity run \
     --env KNOCKEM_ASSAY_ID='{assayId}' \
     --env KNOCKEM_COMPETITION_ID='{competitionId}' \
     --env KNOCKEM_COMPETITION_ATTEMPT_ID='{competitionAttemptId}' \
@@ -80,7 +81,9 @@ singularity run {containerImage} \
     --env KNOCKEM_SUBMISSION_ID='{submissionId}' \
     --env KNOCKEM_RUNMODE='{knockemRunmode}' \
     --env KNOCKEM_USER_EMAIL='{userEmail}' \
-    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ...
+    --env KNOCKEM_CUSTOM_ENV1='{customEnv1}' ... \
+    {containerImage} \
+    knockem_compete_two
 ```
 
 responsibilities:
