@@ -8,7 +8,7 @@ from ...common.records import (
     get_genome_document,
     is_genome_ephemeral,
 )
-from ...container import count_sites, pack_env_args
+from ...container import pack_env_args
 from ..orchestration import enqueue_submission, has_user
 
 
