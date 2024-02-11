@@ -22,7 +22,7 @@ def count_sites(
         stdout=subprocess.PIPE,
     ).communicate(input=genomeContent.encode())
     try:
-        return int(out)
+        return int(out.decode())
     except ValueError as e:
         logging.error(f"count_sites failed with result {out}: {err}")
         raise e

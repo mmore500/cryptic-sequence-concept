@@ -23,4 +23,4 @@ def apply_knockout(
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
     ).communicate(input=genomeContent.encode())
-    return out
+    return out.decode()

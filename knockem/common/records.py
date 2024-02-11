@@ -219,12 +219,14 @@ def add_assay(
 def add_assay_result(
     assayId: str,
     assayResult: dict,
+    assayType: str,
     submissionId: str,
     userEmail: str,
 ) -> None:
     row = with_common_columns(
         assayId=assayId,
         assayResult=assayResult,
+        assayType=assayType,
         submissionId=submissionId,
         userEmail=userEmail,
         _id=assayId,
@@ -284,21 +286,19 @@ def get_submission_assay_results(submissionId: str) -> list[dict]:
         )
 
 
-def get_submission_assay_results_of_type(
+def get_submission_assay_result_of_type(
     submissionId: str, assayType: str
-) -> list[dict]:
+) -> typing.Optional[dict]:
     if get_db() is None:
         result = mongodb_data_api_request(
-            "find",
+            "findOne",
             "assayResults",
             filter={"submissionId": submissionId, "assayType": assayType},
         )
-        return result.get("documents", [])
+        return result.get("document", None)
     else:
-        return list(
-            get_db().assayResults.find(
-                {"submissionId": submissionId, "assayType": assayType},
-            ),
+        return get_db().assayResults.find_one(
+            {"submissionId": submissionId, "assayType": assayType},
         )
 
 

@@ -1,3 +1,5 @@
+import logging
+
 from scipy import stats as scipy_stats
 
 from .. import orchestration as orch
@@ -13,6 +15,8 @@ def dispatch_depended_assays(assayDocument: dict) -> int:
 def dispatch_depended_competitions(assayDocument: dict) -> int:
     if orch.get_num_assay_competitions(assayDocument["assayId"]):
         return 0
+    else:
+        logging.info("Dispatching competitions for nulldist assay.")
 
     num_dispatched = 0
     for replicate in range(100):
@@ -29,6 +33,7 @@ def dispatch_depended_competitions(assayDocument: dict) -> int:
 
 
 def finalize_result(assayDocument: dict) -> dict:
+    logging.info("Finalizing result for nulldist assay.")
     competition_results = rec.get_assay_competition_results(
         assayDocument["assayId"],
     )
@@ -53,6 +58,7 @@ def finalize_result(assayDocument: dict) -> dict:
     rec.add_assay_result(
         assayId=assayDocument["assayId"],
         assayResult=result,
+        assayType=assayDocument["assayType"],
         submissionId=assayDocument["submissionId"],
         userEmail=assayDocument["userEmail"],
     )
