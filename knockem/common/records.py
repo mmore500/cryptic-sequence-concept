@@ -180,6 +180,21 @@ def add_submission(
     return row["_id"]
 
 
+def has_submission(submissionId: str) -> bool:
+    if get_db() is None:
+        result = mongodb_data_api_request(
+            "findOne", "submissions", filter={"_id": submissionId}
+        )
+        return result.get("document", None) is not None
+    else:
+        return bool(
+            get_db().submissions.count_documents(
+                {"_id": submissionId},
+                limit=1,
+            ),
+        )
+
+
 # assays ======================================================================
 def add_assay(
     assayDesignation: dict,
