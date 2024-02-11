@@ -7,6 +7,7 @@ from ...common.records import (
     is_genome_ephemeral,
 )
 from ...container import pack_env_args
+from ..admin import email_submission_status
 from ..orchestration import enqueue_submission
 
 
@@ -68,6 +69,9 @@ def _submission_new(
         maxCompetitionRetries=maxCompetitionRetries,
         submissionId=submissionId,
         userEmail=userEmail,
+    )
+    email_submission_status(
+        submissionId, userEmail, "pending", genomeContentAlpha
     )
 
     return {"submissionId": submissionId}
