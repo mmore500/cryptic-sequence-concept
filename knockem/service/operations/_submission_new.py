@@ -1,7 +1,5 @@
 import uuid
 
-from connexion.exceptions import BadRequestProblem
-
 from ...common.records import (
     add_genome,
     add_submission,
