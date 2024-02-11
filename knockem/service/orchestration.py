@@ -42,7 +42,20 @@ def get_users_table() -> str:
 
 
 # submissions =================================================================
-def add_submission(
+def activate_submission(submissionId: str) -> None:
+    table = get_submissions_table()
+    with get_db() as tx:
+        tx[table].update(
+            dict(
+                activationTimestamp=_get_time(),
+                submissionId=submissionId,
+                status="active",
+            ),
+            ["submissionId"],
+        )
+
+
+def enqueue_submission(
     competitionTimeoutSeconds: int,
     containerEnv: str,
     containerImage: str,
@@ -50,6 +63,7 @@ def add_submission(
     hasAssayDoseCalibration: bool,
     hasAssayDoseTitration: bool,
     hasAssayNulldist: bool,
+    hasAssayScreenCritical: bool,
     hasAssaySkeletonization: bool,
     maxCompetitionsActive: int,
     maxCompetitionRetries: int,
@@ -57,6 +71,7 @@ def add_submission(
     userEmail: str,
 ) -> None:
     row = with_common_columns(
+        activationTimestamp=0,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
         containerEnv=containerEnv,
         containerImage=containerImage,
@@ -64,10 +79,11 @@ def add_submission(
         hasAssayDoseCalibration=hasAssayDoseCalibration,
         hasAssayDoseTitration=hasAssayDoseTitration,
         hasAssayNulldist=hasAssayNulldist,
+        hasAssayScreenCritical=hasAssayScreenCritical,
         hasAssaySkeletonization=hasAssaySkeletonization,
         maxCompetitionsActive=maxCompetitionsActive,
         maxCompetitionRetries=maxCompetitionRetries,
-        status="active",
+        status="pending",
         submissionId=submissionId,
         userEmail=userEmail,
     )
@@ -88,10 +104,23 @@ def complete_submission(submissionId: str) -> None:
         tx[get_competitions_table()].delete(submissionId=submissionId)
 
 
+def get_submission_document(submissionId: str) -> dict:
+    table = get_submissions_table()
+    with get_db() as tx:
+        return tx[table].find_one(submissionId=submissionId)
+
+
 def iter_active_submissionIds() -> typing.List[str]:
     table = get_submissions_table()
     with get_db() as tx:
         for row in tx[table].find(status="active"):
+            yield row["submissionId"]
+
+
+def iter_pending_submissionIds() -> typing.List[str]:
+    table = get_submissions_table()
+    with get_db() as tx:
+        for row in tx[table].find(status="pending"):
             yield row["submissionId"]
 
 
@@ -121,11 +150,13 @@ def complete_assay(assayId: str) -> None:
 
 
 def enqueue_assay(
+    assayDesignation: dict,
     assayId: str,
     assayType: str,
     competitionTimeoutSeconds: int,
     containerEnv: str,
     containerImage: str,
+    dependedByIds: list[str],
     dependsOnIds: list[str],
     genomeIdAlpha: str,
     maxCompetitionsActive: int,
@@ -134,6 +165,7 @@ def enqueue_assay(
     userEmail: str,
 ) -> None:
     row = with_common_columns(
+        assayDesignation=assayDesignation,
         assayId=assayId,
         assayType=assayType,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
@@ -162,6 +194,13 @@ def enqueue_assay(
                 submissionId=submissionId,
                 userEmail=userEmail,
             )
+        for dependedById in dependedByIds:
+            add_dependency(
+                dependedById=dependedById,
+                dependsOnId=row["assayId"],
+                submissionId=submissionId,
+                userEmail=userEmail,
+            )
 
 
 def get_assay_document(assayId: str) -> dict:
@@ -181,6 +220,17 @@ def iter_pending_assayIds() -> typing.Iterator[str]:
     table = get_assays_table()
     with get_db() as tx:
         for row in tx[table].find(status="pending"):
+            yield row["assayId"]
+
+
+def iter_submission_assayIds_of_type(
+    submissionId: str, assayType: str
+) -> typing.Iterator[str]:
+    table = get_assays_table()
+    with get_db() as tx:
+        for row in tx[table].find(
+            submissionId=submissionId, assayType=assayType
+        ):
             yield row["assayId"]
 
 
@@ -213,6 +263,7 @@ def requeue_competition(competitionId: str, retry: int) -> None:
 
 def enqueue_competition(
     assayId: str,
+    competitionDesignation: str,
     competitionId: str,
     competitionTimeoutSeconds: int,
     containerEnv: str,
@@ -228,6 +279,7 @@ def enqueue_competition(
     row = with_common_columns(
         activationTimestamp=0,
         assayId=assayId,
+        competitionDesignation=competitionDesignation,
         competitionId=competitionId,
         competitionRetryCount=0,
         competitionTimeoutSeconds=competitionTimeoutSeconds,
@@ -278,17 +330,28 @@ def get_competition_document(competitionId: str) -> dict:
         return tx[table].find_one(competitionId=competitionId)
 
 
-def iter_active_competitionIds() -> typing.List[str]:
+def is_competition_completed(competitionId: str) -> bool:
+    return get_competition_document["status"] == "completed"
+
+
+def iter_active_competitionIds() -> typing.Iterator[str]:
     table = get_competitions_table()
     with get_db() as tx:
         for row in tx[table].find(status="active"):
             yield row["competitionId"]
 
 
-def iter_pending_competitionIds() -> typing.List[str]:
+def iter_pending_competitionIds() -> typing.Iterator[str]:
     table = get_competitions_table()
     with get_db() as tx:
         for row in tx[table].find(status="pending"):
+            yield row["competitionId"]
+
+
+def iter_assay_competitionIds(assayId: str) -> typing.Iterator[str]:
+    table = get_competitions_table()
+    with get_db() as tx:
+        for row in tx[table].find(assayId=assayId):
             yield row["competitionId"]
 
 
@@ -374,6 +437,12 @@ def get_num_pending_competitions(submissionId: str) -> int:
     table = get_competitions_table()
     with get_db() as tx:
         return tx[table].count(submissionId=submissionId, status="pending")
+
+
+def get_num_assay_competitions(assayId: str) -> int:
+    table = get_competitions_table()
+    with get_db() as tx:
+        return tx[table].count(assayId=assayId)
 
 
 # cleanup =====================================================================

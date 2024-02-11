@@ -1,5 +1,7 @@
 import logging
 import multiprocessing
+import signal
+import sys
 import time
 
 from connexion import AsyncApp
@@ -7,13 +9,36 @@ import schedule
 
 from .service import handlers
 
+_interrupted = 0
+
+
+def _interrupt(signal, frame) -> None:
+    global _interrupted
+    _interrupted += 1
+    if _interrupted == 1:
+        logging.info(
+            "Interrupted! Completing current tasks and shutting down. "
+            "Interrupt again to force shutdown.",
+        )
+    else:
+        logging.info(
+            f"Interrupted count {_interrupted}. Forcefully shutting down.",
+        )
+        sys.exit(1)
+
+
+signal.signal(signal.SIGINT, _interrupt)
+
 
 def run_scheduler():
     schedule.every(10).seconds.do(handlers.run_handlers)
-    while True:
+    while not _interrupted:
         logging.info("Scheduler loop.")
         schedule.run_pending()
-        time.sleep(5)
+        time.sleep(1)
+
+    logging.info("Work completed. Shutting down.")
+    sys.exit(0)
 
 
 logging.basicConfig(level=logging.INFO)
