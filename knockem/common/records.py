@@ -10,6 +10,7 @@ from pymongo.database import Database as MongoDatabase
 import requests
 
 from ..auxlib._is_slurm_job import is_slurm_job
+from ..container import count_sites
 from .meta import with_common_columns
 
 
@@ -77,12 +78,20 @@ def mongodb_data_api_request(
 
 # genomes =====================================================================
 def add_genome(
-    genomeContent: str, isEphemeral: bool, submissionId: str, userEmail: str
+    containerEnv: str,
+    containerImage: str,
+    genomeContent: str,
+    isEphemeral: bool,
+    submissionId: str,
+    userEmail: str,
 ) -> str:
     row = with_common_columns(
         "genomeId",
         "_id",
+        containerEnv=containerEnv,
+        containerImage=containerImage,
         genomeContent=genomeContent,
+        genomeNumSites=count_sites(genomeContent, containerEnv, containerImage),
         isEphemeral=isEphemeral,
         submissionId=submissionId,
         userEmail=userEmail,
