@@ -29,6 +29,11 @@ Check out the live in-browser web app at <https://mmore500.github.io/cryptic-seq
 ![cookie monster example](docs/assets/cookie.gif)
 -->
 
+
+## Installation
+
+`python3 -m pip install "git+https://github.com/mmore500/cryptic-sequence-concept.git#egg=knockem"`
+
 ## Credits
 
 This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [mmore500/cookiecutter-dishtiny-project][https://github.com/mmore500/cookiecutter-dishtiny-project] project template.
