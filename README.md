@@ -1,13 +1,6 @@
-
 # Cryptic Sequence Complexity Concept
 
-
-[![version](https://img.shields.io/endpoint?url=https%3A%2F%2Fmmore500.github.io%2Fcryptic-sequence-concept%2Fversion-badge.json)](https://github.com/mmore500/cryptic-sequence-concept/releases)
-[![GitHub Actions Status](https://github.com/mmore500/cryptic-sequence-concept/actions/workflows/CI/badge.svg)](https://github.com/mmore500/cryptic-sequence-concept/actions/workflows/CI/)
-[![Documentation Status](https://readthedocs.org/projects/cryptic-sequence-concept/badge/?version=latest)](https://cryptic-sequence-concept.readthedocs.io/en/latest/?badge=latest)
-[![documentation coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fmmore500.github.io%2Fcryptic-sequence-concept%2Fdocumentation-coverage-badge.json)](https://cryptic-sequence-concept.readthedocs.io/en/latest/)
-[![code coverage status](https://codecov.io/gh/mmore500/cryptic-sequence-concept/branch/master/graph/badge.svg)](https://codecov.io/gh/mmore500/cryptic-sequence-concept)
-[![dotos](https://img.shields.io/endpoint?url=https%3A%2F%2Fmmore500.com%2Fcryptic-sequence-concept%2Fdoto-badge.json)](https://github.com/mmore500/cryptic-sequence-concept/search?q=todo+OR+fixme&type=)
+[![CI](https://github.com/mmore500/cryptic-sequence-concept/actions/workflows/ci.yaml/badge.svg)](https://github.com/mmore500/cryptic-sequence-concept/actions/workflows/ci.yaml)
 [![GitHub stars](https://img.shields.io/github/stars/mmore500/cryptic-sequence-concept.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/mmore500/cryptic-sequence-concept)
 
 Exploratory work on measures for epistatic and marginal sequence complexity.
