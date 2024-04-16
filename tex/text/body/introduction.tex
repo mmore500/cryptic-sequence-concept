@@ -4,12 +4,12 @@ Understanding under what conditions and through what mechanisms complexity evolv
 Indeed, numerous dimensions of complexity in biological systems have been considered, including that of developmental processes, phenotypic traits, and ecological interactions \citep{szathmary2001can,mcshea2000functional}.
 % Any reasonable treatment of the subject should consider multiple dimensions and not try to turn it into one dimension.
 Among proposed dimensions of biological complexity, the information content of genetic sequences is often useful due to its (relative) tractability, generalizability across systems, and foundational role to many other aspects of biological complexity \citep{adami2002complexity}.
-Although information theoretic formulations have been established to describe biological sequence complexity \citep{weiss2000information}, counts of adaptive sites (i.e., genome sites that benefit fitness) are a common convenient proxy measure for genome sequence complexiity \citep{dolson2019modes}.
+Although information theoretic formulations have been established to describe biological sequence complexity \citep{weiss2000information}, counts of adaptive sites (i.e., genome sites that benefit fitness) are a common convenient proxy measure for genome sequence complexity \citep{dolson2019modes}.
 
 However, challenges can arise in identifying adaptive sites within a genome.
 Beyond very small genome sizes, complete identification of adaptive sites is hindered by combinatoric effects that complete analyses of all knockout combinations necessary to fully detangle epistatic effects intractable \citep{nitash2021information,adami2000evolution}.
 This is particularly the case for systems with implicit fitness conditions with extensive biotic selection effects \citep{moreno2022exploring,channon2000towards}.
-In such circumstances, it can become necessary to use head-to-head competition trials between wildtype straints and knockout variants \textit{in situ}to detect fitness effects \citep{moreno2021case}.
+In such circumstances, it can become necessary to use head-to-head competition trials between wildtype strains and knockout variants \textit{in situ}to detect fitness effects \citep{moreno2021case}.
 Such competition-based fitness assays typically have sensitivity limitations, which makes it difficult to discern sites with small fitness effects.
 
 % Multiple replicates could be performed or, alternately, wildtype vs wildtype replicates could be performed to create a null distribution and then you can see if the abundances for a variant-vs-wildtype competition fall outside that null distribution.
@@ -31,13 +31,13 @@ Such competition-based fitness assays typically have sensitivity limitations, wh
 % However, because fitness is implicit in this simulation system and must be assessed statistically through competition experiments, it is costly to assess and cannot be determined with perfect reliability.
 % (Playing a large game of Jenga to completion becomes intractable if attempting to remove a piece takes more than a few seconds or you can remove a critical piece early on without realizing it.)
 Here, we term genome sites with adaptive effects that are not directly detectable through single-site knockouts as ``cryptic'' sequence complexity.
-To improve the quality of sequence complexity for digital organisms, we propose three assays to conduct statical esimates of
+To improve the quality of sequence complexity for digital organisms, we propose three assays to conduct statical estimates of
 \begin{enumerate}
 \item \textbf{Additive effect cryptic sites:} sites with small contributions to fitness that, individually, fall below the threshold of detectability of fitness assays,
 \item \textbf{Epistatic effect cryptic sites:} sites with fitness effects that are only observable in the context of other knockouts (i.e., redundancy),
 \item \textbf{Any effect cryptic sites:} sites with any contribution to fitness, inclusive of the above.
 \end{enumerate}
 
-The following sections elaborate the design of proposed assays and report initial experiments with a simple model system designed to validate their measurement of cryptic sequence complexity.
+The following sections describe proposed assays and report initial experiments with a simple model system designed to validate their measurement of cryptic sequence complexity.
 Software and data, including full, documented implementations of proposed underlying statistical estimators, are available via GitHub at \url{https://github.com/mmore500/cryptic-sequence-concept}.
 % This project benefited from availability of many pieces of open-source software \citep{TODO}.
