@@ -2,59 +2,26 @@ TODO paste in results
 
 \section{Additive Effect Sites}
 
-This assay uses ``dosed'' knockouts as the basis for estimation.
-For these knockouts, we assume that we've already tperformed a single-site knockout screen to eliminate any non-cryptic sites from consideration.
-Among remaining sites, we randomly sample $n$ and knock them out together.
-You can easily imagine a dose-response curve where small doses would infrequently create detectable effects and large doses would more frequently create detectable effects.
-The shape of this dose curve will depend on the underlying quantity of small effect sites and their average magnitude.
-We propose to model this according to a negative binomial distribution, which models the number of coin flips that succed with probability $p$ needed to reach a number of successes $n$.
-By fitting a negative binomial curve to estimate $n$ and $p$ we can estimate the mean fitness effect of additive sites ($1/n$ where 1 is the threshold of detectability) and the number of sites as $m \times p$ where $m$ is the genome length.
+This assay is designed to detect sites witth small-effect fitness contributions.
+Although knockout effects of individual sites do not reach the threshold for detectability, knocking out several may.
+This assay assumes a preliminary set of single-site knockouts that exclude sites with individually-detectable fitness effects from further consideration.
+Then, sets of remaining sites are sampled and knocked outt together.
 
-% Set Up Sample Genome
-% Create a genome with 1,000 distinct sites, with 5% having an additive fitness effect when knocked out. Effect sizes are distributed uniformly between 0 and 0.2, relative to the detectability threshold of 1.0.
+In the presence of small-effect sites, a classic dose-response curve will occur as sampled set size is increased.
+That is, detectable fitness effects will be observed more frequently for larger knockout sets.
+The shape of this dose curve will depend on both the abundance of small-effect sites and their mean effect size.
+Fitting a negative binomial distribution to the curve allows these factors to estimated.
+This distribution models, for coin flips with success probability $p$, the number of successive trials required to achieve $n$ successes.
+If we consider resolution of sampled sites to small-effect versus true-neutral categories as a coin flip event, then the proportion of small-effect sites will correspond to $p$ and $n$, the number of required small-effect sites to reach detctability, will be inverse to the mean effect size.
+Under this framming, the dose response curve corresponds to the cumulative disribution function of an underlying negative binomial distribution.
 
-% num_sites = 1000
-% distn = lambda x: np.random.rand(x) * 0.2  # mean effect size of 0.1
-% additive_array = create_additive_array(num_sites, 0.05, distn)
-% genome = GenomeExplicit(
-%     [CalcKnockoutEffectsAdditive(additive_array)],
-% )
-% The true number of additive sites is
-
-% num_additive_sites = additive_array.astype(bool).sum()
-% num_additive_sites
-% 50
-% Choose Dose Levels
-% Perform exploratory knockout experiments at a broad range of dose levels to decide the knockout doses to focus on testing.
-
-% knockout_doses = pick_doses_extrema(
-%     genome.test_knockout, num_sites, max_doses=5, smear_count=250
-% )
-% knockout_doses
-% array([ 87, 136, 186, 236, 286])
-% Estimate Additive Site Prevalence
-% Do 1,000 knockout tests at each dose, fit distribution to observed sensitivity rates at each dose, and then estimate per-site effect size and num additive sites.
-
-% est = assay_additive_naive(
-%     genome.test_knockout, num_sites, knockout_doses, num_replications=1000
-% )
-% display(est)
-% {'num additive sites': 50.0,
-%  'per-site effect size': 0.1,
-%  'negative binomial fit': {'r': 10,
-%   'p': 0.05,
-%   'fit quantiles': [0.011607600050082314,
-%    0.1443781613704493,
-%    0.4530475032674642,
-%    0.7462911216433314,
-%    0.9097429398280551],
-%   'error': 0.0008510447653139157},
-%  'knockout doses': array([ 87, 136, 186, 236, 286]),
-%  'dose sensitivies': [0.013, 0.141, 0.43, 0.729, 0.907]}
-% print("actual", num_additive_sites)
-% print("estimated", est["num additive sites"])
-% actual 50
-% estimated 50.0
+For initial experimentts exploring this approach, we generated sammple genomes with 1,000 sites, 50 of which were designated to be small-effect siters.
+Effect sizes for these sites were uniformly between 0 and 0.2, relative to the detectability threshold of 1.0.
+To decide dose levels for the main assay, we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects for one sample at each dose level.
+We used the interval between the lowest dose with a detected fitness effect and the highest dose without a detected fitness effect as the dosing range for the main assay, choosing five dosing levels spaced evenly across this range.
+For example, in one replicate, our selected dose levels were 87, 136, 186, 236, and 286 sites.
+We then performed 1,000 knockouts of site sets sampled at each level.
+Among 10 replicate assays, estimates of the true site countt ranged from TODO to TODO, with a mean estimate of TODO.
 
 \section{Epistatic Effect Sites}
 
