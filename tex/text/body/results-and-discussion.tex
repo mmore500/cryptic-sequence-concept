@@ -58,6 +58,8 @@ By fitting a negative binomial curve to estimate $n$ and $p$ we can estimate the
 
 \section{Epistatic Effect Sites}
 
+\input{fig/epistatic}
+
 This assay uses minimal viable genomes, ``skeletons,'' as the basis for estimation.
 Repeated stochastic successive knockout process until no more sites can be removed to generate a sample of skeletons.
 The intuition is that sites that appear infrequently in skeletons but not others are epistatic.
@@ -67,7 +69,7 @@ We can use knockout effect size to differentiate these cases.
 For this procedure, we iterate through the skeleton and do ``jackknife'' single site knockouts.
 If the marginal knockout effect size of this site is very small, then it is probably an additive site.
 If the marginal knockout effect of the site in the skeleton context is big, it is probably an epistatic effect site --- with the rest of its redundant sites already excluded from the skeleton.
-Figure TODO shows this distinction.
+Figure \ref{fig:epistatic} shows this distinction.
 
 % Create Sample Genome
 % Create a genome with 4,000 distinct sites.
