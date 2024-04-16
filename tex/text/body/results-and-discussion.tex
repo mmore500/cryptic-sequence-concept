@@ -1,41 +1,43 @@
 \section{Additive Effect Sites}
 
 This assay is designed to detect sites with small-effect fitness contributions.
-Although knockout effects of individual sites do not reach the threshold for detectability, knocking out several may.
+Although individual knockout effects of these sites do not reach the threshold for detectability, knocking out several may.
 This assay assumes a preliminary set of single-site knockouts that exclude sites with individually detectable fitness effects from further consideration.
-Then, sets of remaining sites are sampled and knocked out together.
 
-In the presence of small-effect sites, a classic dose-response curve will occur as sampled set size is increased.
+The assay proceeds by sampling sets of remaining sites are sampled and knocking them out together.
+In the presence of small-effect sites, a classic dose-response curve will occur as knockout set size is increased.
 That is, detectable fitness effects will be observed more frequently for larger knockout sets.
 The shape of this dose curve will depend on both the abundance of small-effect sites and their mean effect size.
 Fitting a negative binomial distribution to the curve allows these factors to be estimated.
 This distribution models, for coin flips with success probability $p$, the number of successive trials required to achieve $n$ successes.
-If we consider sampled sites being small-effect versus true-neutral as a coin flip event, then the proportion of small-effect sites will correspond to $p$ and the number of small-effect mutations required to reach detectability, $n$, will be inverse to the mean site effect size.
+If we consider sampled sites being small-effect versus true-neutral as a coin flip event, then the proportion of small-effect sites in the genome will correspond to $p$ and the number of small-effect mutations required to reach detectability, $n$, will be inverse to the mean per-site effect size.
 Under this framing, the dose-response curve corresponds to the cumulative distribution function of an underlying negative binomial distribution.
 
 For an initial experiment exploring this approach, we generated a simple genome with 1,000 sites, 50 of which were designated to be small-effect sites.
-Effect sizes for these sites were uniformly between 0 and 0.2, relative to the detectability threshold of 1.0.
-To decide dose levels for the main assay, we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects for one sample at each dose level.
+Effect sizes for these sites were uniformly between 0 and 0.2, relative to an effect detectability threshold of 1.0.
+To decide dose levels for the main assay, we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects from one sample at each dose level.
 We used the interval between the lowest dose with a detected fitness effect and the highest dose without a detected fitness effect as the dosing range for the main assay, choosing five dosing levels spaced evenly across this range.
-For this trial, our selected dose levels were 87, 136, 186, 236, and 286 sites.
-We then performed 1,000 knockouts of site sets sampled at each level.
+In this case, selected dose levels were 87, 136, 186, 236, and 286 sites.
+We then performed 1,000 knockouts of site sets sampled at each dosage then fit a negative binomial distribution to the observed outcome frequencies.
 Resulting estimates of the additive site count and mean effect size were both accurate, matching the true values of 50.0 and 0.1, respectively.
 
 \section{Epistatic Effect Sites}
 
 \input{fig/epistatic}
 
-This assay is designed to detect sites that only express detectable fitness knockout effects in the presence of specific other knockouts due to redundancy or epistatic masking.
-Because only one among a set of redundant sites will appear in any skeleton, the frequency with which redundant sites are excluded from skeletons should be relatively high.
-However, some very small effect additive sites will also be frequently excluded from skeletons.
-To disambiguate these scenarios, we propose an additional step: ``jackknife'' one-by-one knockouts of each site within sampled skeletons.
-Jackknifed sites with detectable, butt very small magnitude fitness effects can then be identified as likely additive,  rather. than epistatic.
+This assay is designed to detect sites that only express detectable fitness knockout effects in the presence of specific other knockouts due to redundant masking.
+For this assay we generated minimal fitness-equivalent genome ``skeletons'' by knocking out sites until no more could be removed without detectable fitness loss.
+Because only one among a set of redundant sites will appear in any skeleton, the frequency with which redundant sites are \textit{excluded} from skeletons should be high.
+However, some very small effect additive sites will also be able to be eliminated from skeletons.
+To disambiguate these scenarios, we perofrm an additional step: ``jackknife'' one-by-one knockouts of each site within sampled skeletons.
+Jackknifed sites with detectable, but very small magnitude fitness effects can then be identified as likely additive, rather than epistatic.
 
 For an initial experiment exploring this approach, we generated a sample genome with 4,000 sites, 200 of which were designated to be small-effect sites.
 Effect sizes for these sites were uniformly between 0 and 0.7, relative to the detectability threshold of 1.0.
 We additionally introduced 20 sets of 5 redundant sites.
 Fitness penalties uniformly distributed between 0.7 and 1.6 units were incurred when all sites within a set were knocked out.
-We then generated 20 sample skeletons through independent strip-down procedures, knocking out sites until no more could be removed without detectable fitness loss.
+
+To perform the assay, we first generated 20 sample skeletons.
 After performing Jackknife knockouts of each skeleton, we plotted skeleton exclusion frequency versus mean jackknife severity for each site that appeared in any skeleton.
 As shown in Figure \ref{fig:epistatic}, epistatic sites fall into the upper right quadrant.
 This procedure was able to identify 80 of the true 94 epistatic sites in the sample genome.
@@ -43,14 +45,14 @@ This procedure was able to identify 80 of the true 94 epistatic sites in the sam
 \section{Any Effect Sites}
 
 Any genome site with some fitness benefit should, in principle, potentially appear within a genome skeleton.
-Put another way, skeletons sample randomly (although not uniformly) from genome sites with some fitness benefit.
-Under this framing, the composition of genome skeletons can be analogized to the content of traps used by wildlife biologists to estimate the size of animal populations.
-In these scenarios, individuals tend to have lower recapture counts when membered within a large population.
+Put another way, skeletons sample randomly (though not uniformly) from genome sites that provide some fitness benefit.
+The composition of genome skeletons can thus be analogized to the content of traps used by wildlife biologists to estimate the size of animal populations.
+% In these scenarios, individuals tend to have lower recapture counts when diluted within a large population.
 Robust statistical procedures have been developed to account for biasing factors, including variation in capture probabilities among individuals (``trap shyness'') \citep{amstrup2010handbook}.
 In this work, we use the Burnham-Overton procedure to estimate the total number of any-effect sites from the distribution of capture counts among sites appearing within skeleton genomes \citep{burnham1979robust}.
 
 For an initial experiment exploring this approach, we generated a sample genome with 10,000 sites, 395 of which were designated to be small-effect sites, 155 were designated epistatic, and 5 were both small-effect and epistatic.
-Effect sizes for the small-effect sites were uniformly between 0 and 0.7, relative to the detectability threshold of 1.0.
+Effect sizes for the small-effect sites were uniformly distributed between 0 and 0.7, relative to a detectability threshold of 1.0.
 Epistatic sites were organized into 40 4-site sets, with a fitness penalty between 0.7 and 1.6 units incurred when all sites within a set were knocked out.
 We used progressive knockouts to sample 5 skeletons, with 504 distinct sites appearing in at least one skeleton.
 The Burnham-Overton estimation procedure estimated 558 any-effect sites, close to the true count of 555 any-effect sites.
