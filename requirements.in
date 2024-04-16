@@ -19,7 +19,7 @@ pytest-xdist==3.2.1
 ruff==0.0.260
 scipy==1.10.1
 seaborn==0.12.1
-teeplot==0.5.0
+teeplot==1.0.1
 tqdm==4.64.1
 UniformSumDistribution==1.0.3
 
