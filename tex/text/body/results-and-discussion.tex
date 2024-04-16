@@ -31,31 +31,30 @@ However, some very small effect additive sites will also be frequently excluded 
 To disambigute these scenarios, we propose an additional step: ``jackknife'' one-by-one knockouts of each site within sampled skeletons.
 Jackknifed sites with detectable, butt very small magnitude fitness effects can then be identified as likely additive,  rather. than epistatic.
 
-For initial experiments exploring this approach, we generated sammple genomes with 4,000 sites, 200 of which were designated to be small-effect sites.
-We additionally introduced 20 sets of 5 redundnat sites.
+For an initial experiment exploring this approach, we generated a sammple genom with 4,000 sites, 200 of which were designated to be small-effect sites.
 Effect sizes for these sites were uniformly between 0 and 0.7, relative to the detectability threshold of 1.0.
-Fitness penalties uniformly distributed between 0.7 and 1.6 units were incurred if all sites within a set ere knocked out.
+We additionally introduced 20 sets of 5 redundnat sites.
+Fitness penalties uniformly distributed between 0.7 and 1.6 units were incurred when all sites within a set were knocked out.
 We then generated 20 sample skeletons through independent strip-down procedures, knockout out sites until no more could be removed without detectable fitness effects.
 After performing Jackknife knockouts of each skeleton, we plotted skeleton exclusion frequency versus mean jackknive severity for each site that appeared in any skeleton.
 As shown in Figure \ref{fig:epistatic}, epistatic sites fall into the upper right quadrant.
-This procedure was able to identify 80 of the true 94 epistatic sites in the sample genome
+This procedure was able to identify 80 of the true 94 epistatic sites in the sample genome.
 
 \section{Any Effect Sites}
 
-Skeletons can be put to another use to try to directly estimate the number of sites that have any fitness effect.
-Reframed, skeletoniz.
-Any site that has a fitness benefit should, in principle, potentially appear within a skeleton.
-Skeletons randomly sample from among these sites.
-Framed this way, sampling a skeleton genome is not unlike a trap sampling study used by wildlife biologists.
-Extensive, well-developed mathematics exists around this problem.
-Such math will need to be careful to account for ``shyness'' --- uneven probability for some sites appearing in a skeleton.
-We propose to use the Burnham-Overton estimation procedure.
-We give it a distribution of, among the sites that appeared within skeletons, the number of skeletons they appeared in and it gives us a total population estimate
+Any genome site with some fitness benefit should, in principle, potentially appear within a genome skeleton.
+Put another way, skeletons sample randomly (although not uniformly) from genome sites with some fitness benefit.
+Under this framing, the composition of genome skletons can be analogized to the content of traps used by wildlife biologists to estimate the size of animal populations.
+In these scenarios, individuals tend to have lower recapture counts when membered within a large population.
+Robust statistical procedures have been developed to account for biasing factors, including variation in capture probabilities among individuals (``trap shyness'') \citep{amstrup2010handbook}.
+In this work, we use the Burnham-Overton procedure to estimate the total number of any-effect sites from the distribution of capture counts among sites appearing within skeleton genomes \citep{burnham1979robust}.
 
-% # Burnham, Kenneth P., and W. Scott Overton.
-% # "Robust estimation of population size when capture probabilities vary among
-% # animals." Ecology 60.5 (1979): 927-936.
-% # https://doi.org/10.2307/1936861
+For an initial experiment exploring this approach, we generated sammple genomes with 10,000 sites, 395 of which were designated to be small-effect sites, 155 were designated epistatic, and 5 were both small-effect and epistatic.
+Effect sizes for the small-effect sites were uniformly between 0 and 0.7, relative to the detectability threshold of 1.0.
+Epistatic sites were organized into 40 4-site sets, with a fitness penalty between 0.7 and 1.6 units incurred when all sites within a set were knocked out.
+We used progressive knockouts to sample 5 skeletons, with 504 distinct sites appearing in at least one skeleton.
+The Burnham-Overton estimation procedure estimated 558 any-effect sites, close to the true count off 555 any-effect sites.
+The 95\% confidence interval for this estimation was between 533 and 583 sites.
 
 % Create Sample Genome
 % Create a genome with 10,000 distinct sites.
