@@ -13,13 +13,13 @@ This distribution models, for coin flips with success probability $p$, the numbe
 If we consider resolution of sampled sites to small-effect versus true-neutral categories as a coin flip event, then the proportion of small-effect sites will correspond to $p$ and $n$, the number of required small-effect sites to reach detctability, will be inverse to the mean effect size.
 Under this framming, the dose response curve corresponds to the cumulative disribution function of an underlying negative binomial distribution.
 
-For initial experimentts exploring this approach, we generated sammple genomes with 1,000 sites, 50 of which were designated to be small-effect siters.
+For an initial experiment exploring this approach, we generated a sammple genome with 1,000 sites, 50 of which were designated to be small-effect siters.
 Effect sizes for these sites were uniformly between 0 and 0.2, relative to the detectability threshold of 1.0.
 To decide dose levels for the main assay, we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects for one sample at each dose level.
 We used the interval between the lowest dose with a detected fitness effect and the highest dose without a detected fitness effect as the dosing range for the main assay, choosing five dosing levels spaced evenly across this range.
-For example, in one replicate, our selected dose levels were 87, 136, 186, 236, and 286 sites.
+For this trial, our selected dose levels were 87, 136, 186, 236, and 286 sites.
 We then performed 1,000 knockouts of site sets sampled at each level.
-Among 10 replicate assays, estimates of the true site countt ranged from TODO to TODO, with a mean estimate of TODO.
+Resulting estimates of the additive site count and mean effect size were both accurate, matching the true values of 50.0 and 0.1, respectively.
 
 \section{Epistatic Effect Sites}
 
