@@ -1,3 +1,25 @@
 \section{Introduction} \label{sec:introduction}
 
-example \citep{gagliardi2019international}
+Discuss why measuring complexity is important and of central relevance to alife.
+Mention that while we clasically have total visibility into systems, we don't usually have complete interprability --- particularly for implicit, open-ended systems with strong biotic influences.
+
+In these systems, particularly with biotic effects, there is no absolute measure of fitness.
+Instead, you can determine fitness through head-to-head competition trials \textit{in situ}.
+Multiple replicates could be performed or, alternately, wildtype vs wildtype replicates could be performed to create a null distribution and then you can see if the abundances for a variant-vs-wildtype competition fall outside that null distribution.
+This makes it difficult to discern sites that have small fitness effects below the threshold of sensitivity of these trials or where redundancy or other epistatic effects mean that fitness effects only occur against a non-wildtype genetic background.
+
+All sites knockouts one-by-one can fail to detect important things.
+Another classic way to do it is an all pairs knockout.
+However, all combinations work scales exponentially with the number and isn't practical past a few sites (cite Nitash).
+
+Willing to trade-off certainty in precisely what sites contribute to fitness for a statistical estimate of how many sites contribute to fitness and what the character of those contributions are.
+Propose three testing and statistical estimation frameworks to get at this question of cryptic sequence complexity.
+
+Here, we propose assays to conduct statical esimates of
+\begin{enumerate}
+\item \textbf{Additive effect:} sites with small contributions to fitness that, individually, fall below the threshold of detectability of fitness assays,
+\item \textbf{Epistatic effect:} sites with fitness effects that are only observable in the context of other knockouts (i.e., redundancy),
+\item \textbf{Effect-agnostic:} sites that have any contribution to fitness, whether a small effect or an epistatically-dependent effect.
+\end{enumerate}
+
+The following sections elaborate the design of proposed assays and report initial experiments with a simple model system validating their capability to characterize cryptic sequence complexity.

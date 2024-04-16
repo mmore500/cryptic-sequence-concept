@@ -1,1 +1,14 @@
 \section{Methods} \label{sec:methods}
+
+For initial tests of proposed, we used a simple genome model where sites had explicitly ascribed effects.
+This allowed us to design trials with known effects in genomes and then assess the capability assays to recover this information.
+Effects were assigned randomly, to genome sites and multiple effects were allowed to overlap on the same site.
+When evaluating the knockout effects on a genome, we summed constituent effects and defined a deleterious outcome if these effects summed to a value greater than 1.0.
+Additive sites contributed a constant amount TODOAMOUNT to the sum if knocked out.
+Epistatic sites are created in sets of TODOAMOUNT sites, and an effect of TODO was only accured if all sites in a set were knocked out.
+
+This model has obvious limitations that mean that real-applications would be more challenging and does not reflect those challenges, the most obvious one being that the results are deterministic.
+The next steps for this project is to try with test models incorporating stochastic effects, with pre-existing alife systems that are tractable to know the underlying full structure of genomes, and with heavier, more opaque systems that this methodology is ultimately designed to help with.
+
+The following section reports the design of proposed assays and the results of a validation test for each.
+Software and data for these initial experiments are available via GitHub at \url{https://github.com/mmore500/cryptic-sequence-concept}.

@@ -1,1 +1,41 @@
-\section{Results and Discussion} \label{sec:results}
+TODO paste in results
+
+\section{Additive Effect Sites}
+
+This assay uses ``dosed'' knockouts as the basis for estimation.
+For these knockouts, we assume that we've already tperformed a single-site knockout screen to eliminate any non-cryptic sites from consideration.
+Among remaining sites, we randomly sample $n$ and knock them out together.
+You can easily imagine a dose-response curve where small doses would infrequently create detectable effects and large doses would more frequently create detectable effects.
+The shape of this dose curve will depend on the underlying quantity of small effect sites and their average magnitude.
+We propose to model this according to a negative binomial distribution, which models the number of coin flips that succed with probability $p$ needed to reach a number of successes $n$.
+By fitting a negative binomial curve to estimate $n$ and $p$ we can estimate the mean fitness effect of additive sites ($1/n$ where 1 is the threshold of detectability) and the number of sites as $m \times p$ where $m$ is the genome length.
+
+\section{Epistatic Effect Sites}
+
+This assay uses minimal viable genomes, ``skeletons,'' as the basis for estimation.
+Repeated stochastic successive knockout process until no more sites can be removed to generate a sample of skeletons.
+The intuition is that sites that appear infrequently in skeletons but not others are epistatic.
+However, additive small-effect sites will also appear sometimes appear outside skeletons.
+
+We can use knockout effect size to differentiate these cases.
+For this procedure, we iterate through the skeleton and do ``jackknife'' single site knockouts.
+If the marginal knockout effect size of this site is very small, then it is probably an additive site.
+If the marginal knockout effect of the site in the skeleton context is big, it is probably an epistatic effect site --- with the rest of its redundant sites already excluded from the skeleton.
+Figure TODO shows this distinction.
+
+\section{Any Effect Sites}
+
+Skeletons can be put to another use to try to directly estimate the number of sites that have any fitness effect.
+Reframed, skeletoniz.
+Any site that has a fitness benefit should, in principle, potentially appear within a skeleton.
+Skeletons randomly sample from among these sites.
+Framed this way, sampling a skeleton genome is not unlike a trap sampling study used by wildlife biologists.
+Extensive, well-developed mathematics exists around this problem.
+Such math will need to be careful to account for ``shyness'' --- uneven probability for some sites appearing in a skeleton.
+We propose to use the Burnham-Overton estimation procedure.
+We give it a distribution of, among the sites that appeared within skeletons, the number of skeletons they appeared in and it gives us a total population estimate
+
+% # Burnham, Kenneth P., and W. Scott Overton.
+% # "Robust estimation of population size when capture probabilities vary among
+% # animals." Ecology 60.5 (1979): 927-936.
+% # https://doi.org/10.2307/1936861

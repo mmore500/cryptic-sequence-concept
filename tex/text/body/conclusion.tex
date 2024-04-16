@@ -1,1 +1,27 @@
 \section{Conclusion} \label{sec:conclusion}
+
+The additive one is the most strongly scalable to very large genome sizes.
+We will need methodologies to use parallel trials to rapidly strip down skeletons.
+
+The capability of these additive and epistatic assays to give credible results in the presence of the other type of effect needs to be studied.
+We need to figure out how to deal with stochasticity and sensitivity limitations.
+And to assess how bootstrapping or other statistical procedures can be used to create robust confidence inbervals for estimates of cryptic site counts.
+And how to sequence knockouts performed for maximum statistical power.
+
+
+For this type of procedure, logistical considerations also become a major factor.
+Unlike typical experiments with workloads that can be largely designed \textit{a priori}, divied up and sent out to run then collagted and analyzed, these experiments require a tight feeback loop where results from one stage get fed into complex statistical decision making processes to pick knockouts for the next stage.
+In order to be practically useful as a research tool, these procedures will need to be automated and to be useful across systems within the community they will need to be generalizable.
+To this end, in tandeom with statistical devleopment described, we are also developing an orchestration framework.
+Due to the dynamic back-and-forth complexity of the knockout experiments needed to perform the cryptic sequence complexity procedures  and anticipation of different computational modalities for different workloads (i.e., SLURM jobs vs local server vs. laptop).
+Because alife systems vary greatly in terms of their APIs, not to mention underlying content semantics, we have designed this system around a containerization framework.
+Under this framework, users would package their system within a container (i.e., Singularity/Docker) that implements a designated API to count available sites, knock out the $n$th site, and perform a fitness assay (e.g., competing a variant against wild type).
+The container would then be hosted on a free repository like the GitHub container registry or DockerHub and the orchestration framework will do the rest --- dispatching work via container calls and receiving results via a MongoDB server.
+The system is also intended to be fully compatible with local operaiton, where the container would be located locally, the MongoDB database would be run locally, and the orchestration server would be hosted locally.
+
+These experiments can run on a cluster or on a users local machine.
+A goal of this project is to host an orchestration server that can be used freely by the community without any set up.
+An under-development live API demo can be viewed at \url{http://knockem.online/api/v1/ui/}.
+Note that API keys, available by request, are necessary to interact with the system.
+
+We look forward to further developing and rigorously assessing the proposed methods, and collaborating with the community to put it into practice to be able to rigorously study the complexity of our systems.
