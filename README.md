@@ -38,7 +38,7 @@ Consider also citing underlying statistical methodology,
 
 ```bibtex
 @misc{moreno2024methods,
-      title={Methods to Estimate Cryptic Sequence Complexity}, 
+      title={Methods to Estimate Cryptic Sequence Complexity},
       author={Matthew Andres Moreno},
       year={2024},
       eprint={2404.10854},
