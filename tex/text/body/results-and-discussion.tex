@@ -37,10 +37,10 @@ Effect sizes for these sites were uniformly distributed between 0 and 0.7, relat
 We additionally introduced 20 sets of 5 redundant sites.
 Fitness penalties uniformly distributed between 0.7 and 1.6 units were incurred when all sites within a set were knocked out.
 
-To perform the assay, we first generated 20 sample skeletons.
-After performing Jackknife knockouts of each skeleton, we plotted skeleton exclusion frequency versus mean jackknife severity for each site that appeared in any skeleton.
-As shown in Figure \ref{fig:epistatic}, epistatic sites fall into the upper right quadrant.
-This procedure was able to identify 80 of the true 94 epistatic sites in the sample genome.
+To perform the assay, we first sampled 20 genome skeletons.
+We then compared the frequency with which each site appeared in any skeleton to the severity of fitness effects when knocked out individually.
+As Figure \ref{fig:epistatic} shows, epistatic sites are distinct in having both high skeleton exclusion rates and high jackknife knockout severity.
+Applied to the sample genome, this procedure successfully identified 80 of the true 94 epistatic sites.
 
 \section{Any-effect Cryptic Sites}
 
