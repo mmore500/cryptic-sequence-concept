@@ -33,7 +33,7 @@ However, some very small effect additive sites will also be able to be eliminate
 To disambiguate these scenarios, we perform an additional step: ``jackknife'' one-by-one knockouts of each site within sampled skeletons.
 Jackknifed sites with detectable, but very small magnitude fitness effects can then be identified as likely additive, rather than epistatic.
 
-For an initial experiment exploring this approach, we generated a sample genome with 4,000 sites, 200 of which were designated to be small-effect sites.
+For an initial experiment exploring this approach, we generated a test genome with 4,000 sites, 200 of which were designated to be small-effect sites.
 Effect sizes for these sites were uniformly distributed between 0 and 0.7, relative to the detectability threshold of 1.0.
 We additionally introduced 20 sets of 5 redundant sites.
 Fitness penalties uniformly distributed between 0.7 and 1.6 units were incurred when all sites within a set were knocked out.
