@@ -13,11 +13,10 @@ This distribution models, for coin flips with success probability $p$, the numbe
 If we consider sampled sites being small-effect versus true-neutral as a coin flip event, then the proportion of small-effect sites in the genome will correspond to $p$ and the number of small-effect mutations required to reach detectability, $n$, will be inverse to the mean per-site effect size.
 Under this framing, the dose-response curve corresponds to the cumulative distribution function of an underlying negative binomial distribution.
 
-For an initial experiment exploring this approach, we generated a simple genome with 1,000 sites, 50 of which were designated to be small-effect sites.
-Effect sizes for these sites were uniformly distributed between 0 and 0.7, relative to an effect detectability threshold of 1.0.
-To decide dose levels for the main assay, we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects from one sample at each dose level.
-We used the interval between the lowest dose with a detected fitness effect and the highest dose without a detected fitness effect as the dosing range for the main assay, choosing five dosing levels spaced evenly across this range.
-In this case, selected dose levels were 25, 53, 82, 111, and 140 sites.
+For an initial experiment exploring this approach, we generated a simple genome with 1,000 sites.
+Fifty 50 were designated to be small-effect sites, with effect sizes uniformly distributed between 0 and 0.7 (relative to a detectability threshold of 1.0).
+To decide dose levels for the main assay (i.e., numbers of sites in knockout samples), we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects from one sample at each dose level.
+We used the interval between the lowest dose with a detected fitness effect (25 sites) and the highest dose without a detected fitness effect (140 sites) as the dosing range for the main assay, choosing five dosing levels spaced evenly across this range.
 We then performed 1,000 knockouts of site sets sampled at each dosage level and then fit a negative binomial distribution to the observed outcome frequencies.
 Resulting estimates of the additive site count and mean effect size were 30.0 and 0.5, approximating the true values of 50 sites and 0.35 effect size.
 % https://github.com/mmore500/cryptic-sequence-concept/blob/004082f0cfe19dff8769aecbb3cc311be1db2a87/explore_additive.ipynb
@@ -49,8 +48,8 @@ Any genome site with some fitness benefit should, in principle, potentially appe
 Put another way, skeletons sample randomly (though not uniformly) from genome sites that provide some fitness benefit.
 The composition of genome skeletons can thus be analogized to the content of traps used by wildlife biologists to estimate the size of animal populations.
 % In these scenarios, individuals tend to have lower recapture counts when diluted within a large population.
-Robust statistical procedures have been developed to account for biasing factors, including variation in capture probabilities among individuals (``trap shyness'') \citep{amstrup2010handbook}.
-In this work, we use the Burnham-Overton procedure to estimate the total number of any-effect sites from the distribution of capture counts among sites appearing within skeleton genomes \citep{burnham1979robust}.
+Robust statistical procedures exist to account for biasing factors, including variation in capture probabilities among individuals (``trap shyness'') \citep{amstrup2010handbook}.
+We use the Burnham-Overton procedure to estimate the total number of any-effect sites from the distribution of capture counts among skeleton genome sites \citep{burnham1979robust}.
 
 For an initial experiment exploring this approach, we generated a sample genome with 10,000 sites, 395 of which were designated to be small-effect sites, 155 were designated epistatic, and 5 were both small-effect and epistatic.
 Effect sizes for the small-effect sites were uniformly distributed between 0 and 0.7, relative to a detectability threshold of 1.0.
