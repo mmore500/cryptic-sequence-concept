@@ -14,10 +14,10 @@ If we consider sampled sites being small-effect versus true-neutral as a coin fl
 Under this framing, the dose-response curve corresponds to the cumulative distribution function of an underlying negative binomial distribution.
 
 For an initial experiment exploring this approach, we generated a simple genome with 1,000 sites.
-Fifty 50 were designated to be small-effect sites, with effect sizes uniformly distributed between 0 and 0.7 (relative to a detectability threshold of 1.0).
+Fifty sites were designated to be small-effect sites, with effect sizes uniformly distributed between 0 and 0.7 (relative to a detectability threshold of 1.0).
 To decide dose levels for the main assay (i.e., numbers of sites in knockout samples), we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects from one sample at each dose level.
 We used the interval between the lowest dose with a detected fitness effect (25 sites) and the highest dose without a detected fitness effect (140 sites) as the dosing range for the main assay, choosing five dosing levels spaced evenly across this range.
-We then performed 1,000 knockouts of site sets sampled at each dosage level and then fit a negative binomial distribution to the observed outcome frequencies.
+We performed 1,000 knockouts of site sets sampled at each dosage level and then fit a negative binomial distribution to the observed outcome frequencies.
 Resulting estimates of the additive site count and mean effect size were 30.0 and 0.5, approximating the true values of 50 sites and 0.35 effect size.
 % https://github.com/mmore500/cryptic-sequence-concept/blob/004082f0cfe19dff8769aecbb3cc311be1db2a87/explore_additive.ipynb
 
