@@ -7,18 +7,18 @@ This assay assumes a preliminary set of single-site knockouts that exclude sites
 The assay proceeds by sampling sets of remaining sites are sampled and knocking them out together.
 In the presence of small-effect sites, a classic dose-response curve will occur as knockout set size is increased.
 That is, detectable fitness effects will be observed more frequently for larger knockout sets.
-The shape of this dose curve will depend on both the abundance of small-effect sites and their mean effect size.
+The shape of this dose-response curve will depend on both the abundance of small-effect sites and their mean effect size.
 Fitting a negative binomial distribution to the curve allows these factors to be estimated.
 This distribution models, for coin flips with success probability $p$, the number of successive trials required to achieve $n$ successes.
 If we consider sampled sites being small-effect versus true-neutral as a coin flip event, then the proportion of small-effect sites in the genome will correspond to $p$ and the number of small-effect mutations required to reach detectability, $n$, will be inverse to the mean per-site effect size.
 Under this framing, the dose-response curve corresponds to the cumulative distribution function of an underlying negative binomial distribution.
 
 For an initial experiment exploring this approach, we generated a simple genome with 1,000 sites, 50 of which were designated to be small-effect sites.
-Effect sizes for these sites were uniformly between 0 and 0.2, relative to an effect detectability threshold of 1.0.
+Effect sizes for these sites were uniformly distributed between 0 and 0.2, relative to an effect detectability threshold of 1.0.
 To decide dose levels for the main assay, we first sampled 250 doses spread evenly from 1 to 1,000 sites and tested for detectable fitness effects from one sample at each dose level.
 We used the interval between the lowest dose with a detected fitness effect and the highest dose without a detected fitness effect as the dosing range for the main assay, choosing five dosing levels spaced evenly across this range.
 In this case, selected dose levels were 87, 136, 186, 236, and 286 sites.
-We then performed 1,000 knockouts of site sets sampled at each dosage then fit a negative binomial distribution to the observed outcome frequencies.
+We then performed 1,000 knockouts of site sets sampled at each dosage level and then fit a negative binomial distribution to the observed outcome frequencies.
 Resulting estimates of the additive site count and mean effect size were both accurate, matching the true values of 50.0 and 0.1, respectively.
 
 \section{Epistatic Effect Sites}
@@ -29,11 +29,11 @@ This assay is designed to detect sites that only express detectable fitness knoc
 For this assay we generated minimal fitness-equivalent genome ``skeletons'' by knocking out sites until no more could be removed without detectable fitness loss.
 Because only one among a set of redundant sites will appear in any skeleton, the frequency with which redundant sites are \textit{excluded} from skeletons should be high.
 However, some very small effect additive sites will also be able to be eliminated from skeletons.
-To disambiguate these scenarios, we perofrm an additional step: ``jackknife'' one-by-one knockouts of each site within sampled skeletons.
+To disambiguate these scenarios, we perform an additional step: ``jackknife'' one-by-one knockouts of each site within sampled skeletons.
 Jackknifed sites with detectable, but very small magnitude fitness effects can then be identified as likely additive, rather than epistatic.
 
 For an initial experiment exploring this approach, we generated a sample genome with 4,000 sites, 200 of which were designated to be small-effect sites.
-Effect sizes for these sites were uniformly between 0 and 0.7, relative to the detectability threshold of 1.0.
+Effect sizes for these sites were uniformly distributed between 0 and 0.7, relative to the detectability threshold of 1.0.
 We additionally introduced 20 sets of 5 redundant sites.
 Fitness penalties uniformly distributed between 0.7 and 1.6 units were incurred when all sites within a set were knocked out.
 
