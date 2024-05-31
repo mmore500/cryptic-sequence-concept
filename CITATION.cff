@@ -1,0 +1,12 @@
+cff-version: 1.1.0
+message: "If you use this software, please cite it as below."
+title: 'cryptic-sequence-concept: tools to quantify epistatic and small-effect additive sites via knockout'
+authors:
+- family-names: Moreno
+  given-names: Matthew Andres
+  orcid: 0000-0003-4726-4479
+date-released: 2024-05-31
+doi: 10.5281/zenodo.11401734
+license: MIT
+repository-code: https://github.com/mmore500/cryptic-sequence-concept
+url: "https://github.com/mmore500/cryptic-sequence-concept"
